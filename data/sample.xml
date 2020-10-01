@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<testing xmlns="http://www.w3schools.com/Testovac"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.w3schools.com/Testovac TestingQuestionsFormat.xsd">
+    <id>test 1</id>
+    <description>tests for anything and everything</description>
+    <version>1</version>
+    <questions>
+        <question>
+            <description>Why is the sky not red?</description>
+            <answers>
+                <a correct="true">Because it is blue</a>
+                <a correct="false">Because it is orange</a>
+                <a correct="true">Because it is not red</a>
+                <a>Because it is green</a>
+            </answers>
+        </question>
+        <question>
+            <description>Why is the grass not red?</description>
+            <answers>
+                <a>Because it is blue</a>
+                <a>Because it is orange</a>
+                <a correct="true">Because it is not red</a>
+                <a>Because it is gray</a>
+            </answers>
+        </question>
+        <question>
+            <description>dskfhkjdhf</description>
+            <answers>
+                <a>dsafdf</a>
+                <a>dsafdsf</a>
+            </answers>
+        </question>
+    </questions>
+</testing>
