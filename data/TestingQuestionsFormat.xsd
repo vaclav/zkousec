@@ -15,7 +15,14 @@
                             <xs:element name="question" maxOccurs="unbounded">
                                 <xs:complexType>
                                     <xs:sequence>
-                                        <xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                                        <xs:element name="description" minOccurs="1" maxOccurs="1">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="text" type="xs:string" minOccurs="0"/>
+                                                    <xs:element name="img" type="xs:string" minOccurs="0"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
                                         <xs:element name="answers">
                                             <xs:complexType>
                                                 <xs:sequence>

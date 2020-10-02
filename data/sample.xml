@@ -8,7 +8,12 @@
     <version>1</version>
     <questions>
         <question>
-            <description>Why is the sky not red?</description>
+            <description>
+                <text>Why is the sky not red?</text>
+                <img>a.png</img>
+                <img>b.png</img>
+                <text>Why is the sky not reddish?</text>
+            </description>
             <answers>
                 <a correct="true">Because it is blue</a>
                 <a correct="false">Because it is orange</a>
@@ -17,7 +22,9 @@
             </answers>
         </question>
         <question>
-            <description>Why is the grass not red?</description>
+            <description>
+                <text>Why is the grass not red?</text>
+            </description>
             <answers>
                 <a>Because it is blue</a>
                 <a>Because it is orange</a>
@@ -26,7 +33,9 @@
             </answers>
         </question>
         <question>
-            <description>dskfhkjdhf</description>
+            <description>
+                <text>safdaf</text>
+            </description>
             <answers>
                 <a>dsafdf</a>
                 <a>dsafdsf</a>
