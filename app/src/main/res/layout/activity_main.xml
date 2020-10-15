@@ -18,9 +18,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/QuestionPacksAlreadyOnTheDeviceText"
+        android:id="@+id/QuestionPacksOnTheDeviceText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="Question packs already on the device:"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -32,21 +33,23 @@
         android:id="@+id/noQuestionsView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="No question packs installed yet!"
-        android:textSize="12sp"
-        android:textStyle="italic"
+        android:textSize="18sp"
+        android:textStyle="bold"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/QuestionPacksAlreadyOnTheDeviceText"
-        app:layout_constraintEnd_toEndOf="@+id/QuestionPacksAlreadyOnTheDeviceText"
-        app:layout_constraintStart_toStartOf="@+id/QuestionPacksAlreadyOnTheDeviceText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addQuestionPackButton" />
 
     <ListView
         android:id="@+id/listOfButtons"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/QuestionPacksAlreadyOnTheDeviceText" />
+        app:layout_constraintTop_toBottomOf="@+id/QuestionPacksOnTheDeviceText" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
