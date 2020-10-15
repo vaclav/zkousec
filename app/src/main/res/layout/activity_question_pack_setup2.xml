@@ -52,12 +52,14 @@
             android:id="@+id/chip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAppearance="@style/Widget.AppCompat.CompoundButton.CheckBox"
             android:text="Pouze co neumím" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAppearance="@style/Widget.AppCompat.CompoundButton.CheckBox"
             android:text="Úplně náhodně" />
 
     </com.google.android.material.chip.ChipGroup>
