@@ -14,7 +14,7 @@ class QuestionPackSetup : AppCompatActivity() {
         val fileName = intent.getStringExtra("FILE_NAME")
         if(fileName!=null) {
             StartButton.setOnClickListener {
-                Storage.loadQFile(fileName, it.context)
+//                Storage.loadQFile(fileName, it.context)
                 //TODO
             }
 
