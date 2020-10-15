@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         if(listOfFiles.size==0) {
             QuestionPacksOnTheDeviceText.text = "No question packs installed yet!"
             QuestionPacksOnTheDeviceText.setTextColor(Color.RED)
+            imageView.visibility = View.VISIBLE
         }
         listOfButtons.setOnItemClickListener { adapterView, view, position, id ->
             val intent = Intent (this, QuestionPackSetup::class.java)

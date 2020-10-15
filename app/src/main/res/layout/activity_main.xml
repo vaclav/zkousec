@@ -44,6 +44,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addQuestionPackButton" />
 
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/undraw_emptybox"
+        android:paddingRight="40dp"
+        android:paddingLeft="40dp"
+        android:visibility="gone"
+        tools:layout_editor_absoluteY="128dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/QuestionPacksOnTheDeviceText"
+        />
+
     <ListView
         android:id="@+id/listOfButtons"
         android:layout_width="0dp"
@@ -52,6 +68,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/QuestionPacksOnTheDeviceText" />
+        app:layout_constraintTop_toBottomOf="@+id/QuestionPacksOnTheDeviceText" >
+
+    </ListView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
