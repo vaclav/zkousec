@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         )
         listOfButtons.adapter = arrayAdapter
         if(listOfFiles.size==0) {
-            textView2.visibility = View.GONE
+            QuestionPacksAlreadyOnTheDeviceText.visibility = View.GONE
             noQuestionsView.visibility = View.VISIBLE
         }
 
