@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity() {
 
         button2.setOnClickListener {
             val intent = Intent (this, QuestionPackSetup::class.java)
+            intent.putExtra("FILE_NAME", "example.xml");
             startActivity (intent)
         }
     }
