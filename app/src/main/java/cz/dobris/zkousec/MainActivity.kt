@@ -52,8 +52,16 @@ class MainActivity : AppCompatActivity() {
                 val urlByUser = mDialogView.getUrlEditText.text.toString()
                 downloadDialogShown.dismiss()
                 //Toast.makeText(this,urlByUser,Toast.LENGTH_SHORT).show()
-                Storage.saveQFileFromUrl(urlByUser, it.context)
-                refreshListOfQuestionPacks(arrayAdapter!!)
+                try {
+                    Storage.saveQFileFromUrl(urlByUser, it.context)
+                    refreshListOfQuestionPacks(arrayAdapter!!)
+                } catch (e: IllegalArgumentException) {
+                    AlertDialog.Builder(this)
+                        .setTitle("Error")
+                        .setMessage(e.message)
+                        .setPositiveButton("OK", {dialog, which -> dialog.dismiss()})
+                        .show()
+                }
             }
             downloadDialogShown.getUrlCancelButton.setOnClickListener {
                 downloadDialogShown.dismiss()

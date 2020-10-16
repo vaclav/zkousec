@@ -20,7 +20,7 @@ class Storage {
         fun saveQFileFromUrl(url: String, context: Context) {
             //TODO preform download in a separate thread
 //            saveQFile(BufferedInputStream(URL(url).openStream()), context)
-            saveQFile("<questiions></questions>".byteInputStream(), context)
+            saveQFile("<questions></questions>".byteInputStream(), context)
         }
 
         fun saveQFile(input: InputStream, context: Context) {
@@ -67,7 +67,7 @@ class Storage {
             parser.setInput(inputStream, null)
             parser.nextTag()
             //inputStream.readFeed(parser)
-            //TODO
+            //TODO parse XML
 
 
         }
