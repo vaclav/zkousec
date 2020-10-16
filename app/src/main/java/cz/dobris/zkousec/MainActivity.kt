@@ -3,6 +3,7 @@ package cz.dobris.zkousec
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
@@ -18,6 +19,9 @@ import org.w3c.dom.Text
 
 
 class MainActivity : AppCompatActivity() {
+
+    var arrayAdapter: ArrayAdapter<String>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -25,21 +29,15 @@ class MainActivity : AppCompatActivity() {
         // TODO: Add button and img to each item in the list
         // TODO: Make possible to delete Question Packs from MainActivity
 
-        val listOfFiles = Storage.listQFiles(this)
-        val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
-            this, android.R.layout.simple_list_item_1, listOfFiles
-        )
+        arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1)
         listOfButtons.adapter = arrayAdapter
-        if(listOfFiles.size==0) {
-            QuestionPacksOnTheDeviceText.text = "No question packs installed yet!"
-            QuestionPacksOnTheDeviceText.setTextColor(Color.RED)
-            imageView.visibility = View.VISIBLE
-        }
+        refreshListOfQuestionPacks(arrayAdapter!!)
+
         listOfButtons.setOnItemClickListener { adapterView, view, position, id ->
             val intent = Intent (this, QuestionPackSetup::class.java)
+            intent.putExtra("FILE_NAME", "example.xml");
             startActivity (intent)
         }
-
 
         //This part of code shows dialog to user with text field for downloading Question Pack from URL.
         //URL is saved in "urlByUser"
@@ -52,16 +50,35 @@ class MainActivity : AppCompatActivity() {
 
             downloadDialogShown.getUrlButton.setOnClickListener {
                 val urlByUser = mDialogView.getUrlEditText.text.toString()
-                // TODO: Some how download files from URL to the device
                 downloadDialogShown.dismiss()
                 //Toast.makeText(this,urlByUser,Toast.LENGTH_SHORT).show()
+                Storage.saveQFileFromUrl(urlByUser, it.context)
+                refreshListOfQuestionPacks(arrayAdapter!!)
             }
             downloadDialogShown.getUrlCancelButton.setOnClickListener {
                 downloadDialogShown.dismiss()
             }
-
-
         }
-
     }
+
+    override fun onStart() {
+        super.onStart()
+        refreshListOfQuestionPacks(arrayAdapter!!)
+    }
+
+    fun refreshListOfQuestionPacks(arrayAdapter: ArrayAdapter<String>) {
+        val listOfFiles = Storage.listQFiles(this)
+        arrayAdapter.clear()
+        if(listOfFiles.size==0) {
+            QuestionPacksOnTheDeviceText.text = "No question packs installed yet!"
+            QuestionPacksOnTheDeviceText.setTextColor(Color.RED)
+            imageView.visibility = View.VISIBLE
+        }
+        for (fileName in listOfFiles) {
+            arrayAdapter.add(fileName)
+            Log.d("Zkousec", fileName + ":" + arrayAdapter.javaClass)
+        }
+        arrayAdapter.notifyDataSetChanged()
+    }
+
 }

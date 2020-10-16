@@ -17,12 +17,15 @@ class Storage {
             return if (l != null) l else Array<String>(0, { "" })
         }
 
-        fun saveQFileFromUrl(name: String, url: String, context: Context) {
-            saveQFile(name, BufferedInputStream(URL(url).openStream()), context)
+        fun saveQFileFromUrl(url: String, context: Context) {
+            //TODO preform download in a separate thread
+//            saveQFile(BufferedInputStream(URL(url).openStream()), context)
+            saveQFile("<questiions></questions>".byteInputStream(), context)
         }
 
-        fun saveQFile(name: String, input: InputStream, context: Context) {
+        fun saveQFile(input: InputStream, context: Context) {
             val dir = context.getDir(DIR_NAME, Context.MODE_PRIVATE)
+            val name = "example.xml"  //TODO obtain the name from the XML doc
             val file = File(dir, name)
             if (file.exists()) throw IllegalArgumentException("File $name already exists.")
 
