@@ -2,6 +2,7 @@ package cz.dobris.zkousec
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_question_pack_setup2.*
@@ -12,12 +13,14 @@ class QuestionPackSetup : AppCompatActivity() {
         setContentView(R.layout.activity_question_pack_setup2)
 
         val fileName = intent.getStringExtra("FILE_NAME")
+
+        TitleText.text = fileName.replace(".xml","")
+
         if(fileName!=null) {
             StartButton.setOnClickListener {
 //                Storage.loadQFile(fileName, it.context)
                 //TODO
             }
-
             DeleteButton.setOnClickListener {
                 AlertDialog.Builder(this)
                     .setTitle("Delete file")
@@ -25,11 +28,16 @@ class QuestionPackSetup : AppCompatActivity() {
                     .setPositiveButton("Yes",
                         DialogInterface.OnClickListener { dialog, which ->
                             Storage.deleteQFile(fileName, it.context)
+                            val intent = Intent (this, MainActivity::class.java)
+                            startActivity(intent)
                         })
+
                     .setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
                     })
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show()
+
+
             }
         }
     }
