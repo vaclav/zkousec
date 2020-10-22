@@ -6,6 +6,7 @@ import org.xmlpull.v1.XmlPullParser
 import java.io.*
 import java.lang.IllegalArgumentException
 import java.net.URL
+import kotlin.random.Random
 
 class Storage {
     companion object {
@@ -25,7 +26,8 @@ class Storage {
 
         fun saveQFile(input: InputStream, context: Context) {
             val dir = context.getDir(DIR_NAME, Context.MODE_PRIVATE)
-            val name = "example.xml"  //TODO obtain the name from the XML doc
+            var r = Random(System.currentTimeMillis()).nextInt()
+            val name = "example" + r + ".xml"  //TODO obtain the name from the XML doc
             val file = File(dir, name)
             if (file.exists()) throw IllegalArgumentException("File $name already exists.")
 

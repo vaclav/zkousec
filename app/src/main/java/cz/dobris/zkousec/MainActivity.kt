@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // TODO: Add button and img to each item in the list
-        // TODO: Make possible to delete Question Packs from MainActivity
 
         arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1)
         listOfButtons.adapter = arrayAdapter
@@ -35,7 +34,8 @@ class MainActivity : AppCompatActivity() {
 
         listOfButtons.setOnItemClickListener { adapterView, view, position, id ->
             val intent = Intent (this, QuestionPackSetup::class.java)
-            intent.putExtra("FILE_NAME", "example.xml");
+            val item = arrayAdapter!!.getItem(position)
+            intent.putExtra("FILE_NAME", item);
             startActivity (intent)
         }
 
@@ -80,7 +80,11 @@ class MainActivity : AppCompatActivity() {
         if(listOfFiles.size==0) {
             QuestionPacksOnTheDeviceText.text = "No question packs installed yet!"
             QuestionPacksOnTheDeviceText.setTextColor(Color.RED)
+            QuestionPacksOnTheDeviceText.visibility = View.VISIBLE
             imageView.visibility = View.VISIBLE
+        } else {
+            QuestionPacksOnTheDeviceText.visibility = View.GONE
+            imageView.visibility = View.GONE
         }
         for (fileName in listOfFiles) {
             arrayAdapter.add(fileName)
