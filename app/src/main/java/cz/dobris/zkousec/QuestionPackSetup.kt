@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_question_pack_setup2.*
 
@@ -14,11 +15,12 @@ class QuestionPackSetup : AppCompatActivity() {
 
         val fileName = intent.getStringExtra("FILE_NAME")
 
-        TitleText.text = fileName.replace(".xml","")
 
         if(fileName!=null) {
+            val qp = Storage.loadQFile(fileName, this)
+            Log.d("Zkousec", "Loaded: " + qp.id + ":" + qp.version)
+            TitleText.text = fileName.replace(".xml","")
             StartButton.setOnClickListener {
-//                Storage.loadQFile(fileName, it.context)
                 //TODO
             }
             DeleteButton.setOnClickListener {

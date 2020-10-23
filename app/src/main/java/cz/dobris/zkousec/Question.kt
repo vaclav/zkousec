@@ -1,7 +1,5 @@
 package layout
 
-class Question (text : String, answers : Array<Answer>) {
+class Question (val text : String, val answers : List<Answer>) {
     var answeredCorrectly : Boolean = false
-    val text = text;
-    val answers = answers;
 }

@@ -1,5 +1,5 @@
 package layout
 
-class QuestionPack (questions : Array<Question>) {
-    val questions = questions
+class QuestionPack (val id : String, val description : String, val version : String, val questions : List<Question>) {
+
 }

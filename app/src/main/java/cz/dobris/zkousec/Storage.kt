@@ -1,11 +1,14 @@
 package cz.dobris.zkousec
 
 import android.content.Context
+import android.util.Log
 import android.util.Xml
+import layout.QuestionPack
 import org.xmlpull.v1.XmlPullParser
-import java.io.*
-import java.lang.IllegalArgumentException
-import java.net.URL
+import java.io.File
+import java.io.FileInputStream
+import java.io.IOException
+import java.io.InputStream
 import kotlin.random.Random
 
 class Storage {
@@ -21,13 +24,24 @@ class Storage {
         fun saveQFileFromUrl(url: String, context: Context) {
             //TODO preform download in a separate thread
 //            saveQFile(BufferedInputStream(URL(url).openStream()), context)
-            saveQFile("<questions></questions>".byteInputStream(), context)
+            saveQFile(
+                """
+                <testing xmlns="http://www.w3schools.com/Testovac"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.w3schools.com/Testovac TestingQuestionsFormat.xsd">
+    <id>test_otazek</id>
+    <description>tests for anything and everything</description>
+    <version>1</version>
+    <questions></questions>
+</testing>
+            """.trimIndent().byteInputStream(), context
+            )
         }
 
         fun saveQFile(input: InputStream, context: Context) {
             val dir = context.getDir(DIR_NAME, Context.MODE_PRIVATE)
-            var r = Random(System.currentTimeMillis()).nextInt()
-            val name = "example" + r + ".xml"  //TODO obtain the name from the XML doc
+            val r = Random(System.currentTimeMillis()).nextInt()
+            val name = "temp" + r + ".xml"
             val file = File(dir, name)
             if (file.exists()) throw IllegalArgumentException("File $name already exists.")
 
@@ -44,10 +58,15 @@ class Storage {
                         }
                     })
                 })
+
+                Log.d("Zkousec", "Question pack AAAAAAAAA")
+                val qp = loadQFile(name, context)
+                Log.d("Zkousec", "Question pack " + qp.id + ":" + qp.description)
+                val realName = qp.id + r + ".xml"
+                file.renameTo(File(dir, realName))
             } catch (e: IOException) {
                 throw e
             }
-
         }
 
         fun deleteQFile(name: String, context: Context) {
@@ -57,21 +76,21 @@ class Storage {
             f.delete()
         }
 
-        fun loadQFile(name: String, context: Context) {
-//            val dir = context.getDir(DIR_NAME, Context.MODE_PRIVATE)
-//            val file = File(dir, name)
-//            if(!file.exists()) throw IllegalArgumentException("File $name does not exist.")
-//            BufferedInputStream(file.inputStream())
+        fun loadQFile(name: String, context: Context): QuestionPack {
+            val dir = context.getDir(DIR_NAME, Context.MODE_PRIVATE)
+            val file = File(dir, name)
+            if (!file.exists()) throw IllegalArgumentException("File $name does not exist.")
+            val inputStream = file.inputStream() //.openFileInput(DIR_NAME + File.pathSeparator + name)
+            return loadQFile(inputStream, context)
+        }
 
-            val inputStream = context.openFileInput(DIR_NAME + File.pathSeparator + name)
+        fun loadQFile(inputStream: FileInputStream, context: Context): QuestionPack {
             val parser = Xml.newPullParser()
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
             parser.setInput(inputStream, null)
             parser.nextTag()
-            //inputStream.readFeed(parser)
-            //TODO parse XML
-
-
+            return QuestionPackParser().readQuestionPack(parser)
         }
+
     }
 }
