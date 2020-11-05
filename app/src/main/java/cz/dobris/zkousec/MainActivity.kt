@@ -46,13 +46,13 @@ class MainActivity : AppCompatActivity() {
             val mDialogView = LayoutInflater.from(this).inflate(R.layout.url_dialog, null)
             val downloadDialog = AlertDialog.Builder(this)
                 .setView(mDialogView)
-                .setTitle("Download Question Pack")
+                .setTitle("Download Question Pack (leave empty to get a sample file)")
                 val downloadDialogShown = downloadDialog.show()
 
             downloadDialogShown.getUrlButton.setOnClickListener {
-                val urlByUser = mDialogView.getUrlEditText.text.toString()
+                val value = mDialogView.getUrlEditText.text.toString()
+                val urlByUser = if (value.trim().length > 0) value else "http://gpars.org/sample.xml"
                 downloadDialogShown.dismiss()
-                //Toast.makeText(this,urlByUser,Toast.LENGTH_SHORT).show()
                 try {
                     Thread(Runnable {
                         Log.d("Zkousec", "Running in a new thread!")
@@ -60,8 +60,8 @@ class MainActivity : AppCompatActivity() {
                             Storage.saveQFileFromUrl(urlByUser, it.context)
                             v.post { refreshListOfQuestionPacks(arrayAdapter!!) }
                         }catch (e : Exception) {
-                            //TODO handle the exception
                             e.printStackTrace()
+                            v.post { Toast.makeText(this, "Cannot download the file. " + e.message ,Toast.LENGTH_SHORT).show() }
                         }
                     }).start()
                 } catch (e: IllegalArgumentException) {
