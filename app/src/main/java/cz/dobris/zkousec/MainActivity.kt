@@ -56,9 +56,13 @@ class MainActivity : AppCompatActivity() {
                 try {
                     Thread(Runnable {
                         Log.d("Zkousec", "Running in a new thread!")
-                        Thread.sleep(5000)
-                        Storage.saveQFileFromUrl(urlByUser, it.context)
-                        v.post { refreshListOfQuestionPacks(arrayAdapter!!) }
+                        try {
+                            Storage.saveQFileFromUrl(urlByUser, it.context)
+                            v.post { refreshListOfQuestionPacks(arrayAdapter!!) }
+                        }catch (e : Exception) {
+                            //TODO handle the exception
+                            e.printStackTrace()
+                        }
                     }).start()
                 } catch (e: IllegalArgumentException) {
                     AlertDialog.Builder(this)

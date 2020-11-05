@@ -5,10 +5,8 @@ import android.util.Log
 import android.util.Xml
 import layout.QuestionPack
 import org.xmlpull.v1.XmlPullParser
-import java.io.File
-import java.io.FileInputStream
-import java.io.IOException
-import java.io.InputStream
+import java.io.*
+import java.net.URL
 import kotlin.random.Random
 
 class Storage {
@@ -22,20 +20,19 @@ class Storage {
         }
 
         fun saveQFileFromUrl(url: String, context: Context) {
-            //TODO preform download in a separate thread
-//            saveQFile(BufferedInputStream(URL(url).openStream()), context)
-            saveQFile(
-                """
-                <testing xmlns="http://www.w3schools.com/Testovac"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://www.w3schools.com/Testovac TestingQuestionsFormat.xsd">
-    <id>test_otazek</id>
-    <description>tests for anything and everything</description>
-    <version>1</version>
-    <questions></questions>
-</testing>
-            """.trimIndent().byteInputStream(), context
-            )
+            saveQFile(BufferedInputStream(URL(url).openStream()), context)
+//            saveQFile(
+//                """
+//                <testing xmlns="http://www.w3schools.com/Testovac"
+//         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+//         xsi:schemaLocation="http://www.w3schools.com/Testovac TestingQuestionsFormat.xsd">
+//    <id>test_otazek</id>
+//    <description>tests for anything and everything</description>
+//    <version>1</version>
+//    <questions></questions>
+//</testing>
+//            """.trimIndent().byteInputStream(), context
+//            )
         }
 
         fun saveQFile(input: InputStream, context: Context) {
