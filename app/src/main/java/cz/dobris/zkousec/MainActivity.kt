@@ -1,5 +1,6 @@
 package cz.dobris.zkousec
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         //This part of code shows dialog to user with text field for downloading Question Pack from URL.
         //URL is saved in "urlByUser"
-        addQuestionPackButton.setOnClickListener{
+        addQuestionPackButton.setOnClickListener{v ->
             val mDialogView = LayoutInflater.from(this).inflate(R.layout.url_dialog, null)
             val downloadDialog = AlertDialog.Builder(this)
                 .setView(mDialogView)
@@ -53,8 +54,12 @@ class MainActivity : AppCompatActivity() {
                 downloadDialogShown.dismiss()
                 //Toast.makeText(this,urlByUser,Toast.LENGTH_SHORT).show()
                 try {
-                    Storage.saveQFileFromUrl(urlByUser, it.context)
-                    refreshListOfQuestionPacks(arrayAdapter!!)
+                    Thread(Runnable {
+                        Log.d("Zkousec", "Running in a new thread!")
+                        Thread.sleep(5000)
+                        Storage.saveQFileFromUrl(urlByUser, it.context)
+                        v.post { refreshListOfQuestionPacks(arrayAdapter!!) }
+                    }).start()
                 } catch (e: IllegalArgumentException) {
                     AlertDialog.Builder(this)
                         .setTitle("Error")
