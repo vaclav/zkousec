@@ -15,22 +15,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:capitalize="none"
-        android:text="Název"
+        android:text="Title"
         android:textAlignment="center"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/StartButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Start"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TitleText" />
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/TestingOptions"
@@ -54,7 +44,7 @@
             android:layout_height="wrap_content"
             android:checkable="true"
             android:clickable="true"
-            android:text="Pouze co neumím"
+            android:text="Learn"
             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
         <com.google.android.material.chip.Chip
@@ -63,17 +53,38 @@
             android:layout_height="wrap_content"
             android:checkable="true"
             android:clickable="true"
-            android:text="Úplně náhodně"
+            android:text="Test"
             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
     </com.google.android.material.chip.ChipGroup>
 
     <Button
-        android:id="@+id/DeleteButton"
+        android:id="@+id/StartButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Smazat"
+        android:text="Start"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TitleText" />
+
+    <Button
+        android:id="@+id/ResetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Reset"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TitleText" />
+
+    <Button
+        android:id="@+id/DeleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="32dp"
+        android:text="Delete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TestingOptions" />
