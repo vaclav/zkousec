@@ -1,11 +1,11 @@
 package cz.dobris.zkousec
 
-import layout.Answer
-import layout.Question
-import layout.QuestionPack
+import android.util.Log
+import layout.*
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
+import java.lang.StringBuilder
 
 class QuestionPackParser {
 
@@ -27,7 +27,7 @@ class QuestionPackParser {
                 "id" -> id = readValue(parser, "id")
                 "description" -> description = readValue(parser, "description")
                 "version" -> version = readValue(parser, "version")
-                "questions" -> questions.add(readQuestions(parser))
+                "questions" -> questions.addAll(readQuestions(parser))
                 else -> skip(parser)
             }
         }
@@ -35,10 +35,51 @@ class QuestionPackParser {
         return qp
     }
 
-    private fun readQuestions(parser: XmlPullParser): Question {
-       // TODO("Not yet implemented")
-        skip(parser)
-        return Question("Q1", emptyList())
+    private fun readQuestions(parser: XmlPullParser): List<Question> {
+        parser.require(XmlPullParser.START_TAG, nameSpace, "questions")
+        val questions = mutableListOf<Question>()
+        parser.nextTag()
+        while(parser.name=="question") {
+            questions.add(readQuestion(parser))
+            parser.nextTag()
+        }
+        parser.require(XmlPullParser.END_TAG, nameSpace, "questions")
+        return questions
+    }
+
+    private fun readQuestion(parser: XmlPullParser): Question {
+        parser.require(XmlPullParser.START_TAG, nameSpace, "question")
+        val s = StringBuilder()
+        parser.nextTag()
+        while(parser.name=="part") {
+            parser.require(XmlPullParser.START_TAG, nameSpace, "part")
+            parser.nextTag()
+            if (parser.name == "text") {
+                s.append(readValue(parser, "text"))
+                s.append(" ")
+            } else {
+                //TODO handle img parts
+                skip(parser)
+            }
+            parser.nextTag()
+            parser.require(XmlPullParser.END_TAG, nameSpace, "part")
+            parser.nextTag()
+        }
+
+        val answers = mutableListOf<Answer>()
+        parser.require(XmlPullParser.START_TAG, nameSpace, "answers")
+        parser.nextTag()
+        while(parser.name=="a") {
+            parser.require(XmlPullParser.START_TAG, nameSpace, "a")
+            val correct = parser.attributeCount > 0 && parser.getAttributeValue(0) == "true"
+            answers.add(TextualAnswer(correct, readText(parser)))
+            parser.require(XmlPullParser.END_TAG, nameSpace, "a")
+            parser.nextTag()
+        }
+        parser.require(XmlPullParser.END_TAG, nameSpace, "answers")
+        parser.nextTag()
+        parser.require(XmlPullParser.END_TAG, nameSpace, "question")
+        return Question(s.toString(), answers)
     }
 
     @Throws(IOException::class, XmlPullParserException::class)

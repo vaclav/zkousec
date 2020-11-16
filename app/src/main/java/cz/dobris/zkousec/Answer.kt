@@ -1,13 +1,13 @@
 package layout
 
-open class Answer {
-    val correct : Boolean = false
+open class Answer(val correct: Boolean = false) {
+
 }
 
-class TextAnswer (text : String) : Answer () {
-    val text = text
+class TextualAnswer (correct: Boolean, val text : String) : Answer (correct) {
+
 }
 
-class ImageAnswer (url : String) : Answer () {
-    val url = url
+class ImageAnswer (val url : String) : Answer () {
+
 }

@@ -52,12 +52,13 @@ class MainActivity : AppCompatActivity() {
             downloadDialogShown.getUrlButton.setOnClickListener {
                 val value = mDialogView.getUrlEditText.text.toString()
                 val urlByUser = if (value.trim().length > 0) value else "http://gpars.org/sample.xml"
+                val testName = mDialogView.getTestName.text.toString().trim()
                 downloadDialogShown.dismiss()
                 try {
                     Thread(Runnable {
                         Log.d("Zkousec", "Running in a new thread!")
                         try {
-                            Storage.saveQFileFromUrl(urlByUser, it.context)
+                            Storage.saveQFileFromUrl(urlByUser, testName, it.context)
                             v.post { refreshListOfQuestionPacks(arrayAdapter!!) }
                         }catch (e : Exception) {
                             e.printStackTrace()

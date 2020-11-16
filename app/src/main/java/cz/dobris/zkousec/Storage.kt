@@ -19,8 +19,8 @@ class Storage {
             return if (l != null) l else Array<String>(0, { "" })
         }
 
-        fun saveQFileFromUrl(url: String, context: Context) {
-            saveQFile(BufferedInputStream(URL(url).openStream()), context)
+        fun saveQFileFromUrl(url: String, testName: String, context: Context) {
+            saveQFile(BufferedInputStream(URL(url).openStream()), testName, context)
 //            saveQFile(
 //                """
 //                <testing xmlns="http://www.w3schools.com/Testovac"
@@ -35,7 +35,7 @@ class Storage {
 //            )
         }
 
-        fun saveQFile(input: InputStream, context: Context) {
+        fun saveQFile(input: InputStream, testName: String, context: Context) {
             val dir = context.getDir(DIR_NAME, Context.MODE_PRIVATE)
             val r = Random(System.currentTimeMillis()).nextInt()
             val name = "temp" + r + ".xml"
@@ -56,10 +56,9 @@ class Storage {
                     })
                 })
 
-                Log.d("Zkousec", "Question pack AAAAAAAAA")
                 val qp = loadQFile(name, context)
                 Log.d("Zkousec", "Question pack " + qp.id + ":" + qp.description)
-                val realName = qp.id + r + ".xml"
+                val realName = (if (testName.length == 0) qp.id + r else testName) + ".xml"
                 file.renameTo(File(dir, realName))
             } catch (e: IOException) {
                 throw e
