@@ -39,15 +39,17 @@ class QuestionPackParser {
         parser.require(XmlPullParser.START_TAG, nameSpace, "questions")
         val questions = mutableListOf<Question>()
         parser.nextTag()
+        var i  = 0
         while(parser.name=="question") {
-            questions.add(readQuestion(parser))
+            questions.add(readQuestion(parser, i))
+            i+=1
             parser.nextTag()
         }
         parser.require(XmlPullParser.END_TAG, nameSpace, "questions")
         return questions
     }
 
-    private fun readQuestion(parser: XmlPullParser): Question {
+    private fun readQuestion(parser: XmlPullParser, index : Int): Question {
         parser.require(XmlPullParser.START_TAG, nameSpace, "question")
         val s = StringBuilder()
         parser.nextTag()
@@ -79,7 +81,7 @@ class QuestionPackParser {
         parser.require(XmlPullParser.END_TAG, nameSpace, "answers")
         parser.nextTag()
         parser.require(XmlPullParser.END_TAG, nameSpace, "question")
-        return Question(s.toString(), answers)
+        return Question(index, s.toString(), answers)
     }
 
     @Throws(IOException::class, XmlPullParserException::class)

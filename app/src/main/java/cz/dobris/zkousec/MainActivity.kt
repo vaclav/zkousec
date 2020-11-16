@@ -1,6 +1,5 @@
 package cz.dobris.zkousec
 
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -8,15 +7,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import cz.dobris.zkousec.fileStorage.Storage
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.url_dialog.*
 import kotlinx.android.synthetic.main.url_dialog.view.*
-import org.w3c.dom.Text
 
 
 class MainActivity : AppCompatActivity() {

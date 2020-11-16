@@ -1,5 +1,6 @@
 package cz.dobris.zkousec
 
+import cz.dobris.zkousec.domain.TestSession
 import org.junit.Assert
 
 class TestHelper {

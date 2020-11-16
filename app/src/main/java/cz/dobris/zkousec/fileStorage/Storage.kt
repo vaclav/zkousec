@@ -1,8 +1,9 @@
-package cz.dobris.zkousec
+package cz.dobris.zkousec.fileStorage
 
 import android.content.Context
 import android.util.Log
 import android.util.Xml
+import cz.dobris.zkousec.QuestionPackParser
 import layout.QuestionPack
 import org.xmlpull.v1.XmlPullParser
 import java.io.*
@@ -20,7 +21,11 @@ class Storage {
         }
 
         fun saveQFileFromUrl(url: String, testName: String, context: Context) {
-            saveQFile(BufferedInputStream(URL(url).openStream()), testName, context)
+            saveQFile(
+                BufferedInputStream(URL(url).openStream()),
+                testName,
+                context
+            )
 //            saveQFile(
 //                """
 //                <testing xmlns="http://www.w3schools.com/Testovac"
@@ -56,7 +61,11 @@ class Storage {
                     })
                 })
 
-                val qp = loadQFile(name, context)
+                val qp =
+                    loadQFile(
+                        name,
+                        context
+                    )
                 Log.d("Zkousec", "Question pack " + qp.id + ":" + qp.description)
                 val realName = (if (testName.length == 0) qp.id + r else testName) + ".xml"
                 file.renameTo(File(dir, realName))
@@ -77,7 +86,10 @@ class Storage {
             val file = File(dir, name)
             if (!file.exists()) throw IllegalArgumentException("File $name does not exist.")
             val inputStream = file.inputStream() //.openFileInput(DIR_NAME + File.pathSeparator + name)
-            return loadQFile(inputStream, context)
+            return loadQFile(
+                inputStream,
+                context
+            )
         }
 
         fun loadQFile(inputStream: FileInputStream, context: Context): QuestionPack {

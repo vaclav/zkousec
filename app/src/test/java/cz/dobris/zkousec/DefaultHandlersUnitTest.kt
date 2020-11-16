@@ -1,11 +1,10 @@
 package cz.dobris.zkousec
 
+import cz.dobris.zkousec.domain.TestSession
 import layout.Answer
 import layout.Question
 import layout.QuestionPack
 import org.junit.Test
-
-import org.junit.Assert.*
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -14,17 +13,17 @@ import org.junit.Assert.*
  */
 class DefaultHandlersUnitTest {
     val qp = QuestionPack("test", "Test", "1.0", listOf(
-        Question("what?", listOf(
+        Question(0, "what?", listOf(
             Answer(true),
             Answer(false),
             Answer(false)
         )),
-        Question("who?", listOf(
+        Question(1,"who?", listOf(
             Answer(false),
             Answer(true),
             Answer(false)
         )),
-        Question("when?", listOf(
+        Question(2,"when?", listOf(
             Answer(false),
             Answer(false),
             Answer(true)
@@ -34,7 +33,7 @@ class DefaultHandlersUnitTest {
     @Test
     fun simpleScenario() {
 //        assertEquals(4, 2 + 2)
-        val session = TestSession(qp)
+        val session = TestSession("file", qp)
         val nextQuestion1 = session.nextQuestion()
         val nextQuestion2 = session.nextQuestion()
         assert(nextQuestion1 == nextQuestion2)
@@ -69,7 +68,7 @@ class DefaultHandlersUnitTest {
 
     @Test
     fun doubleCallTo_evaluateAnswer() {
-        val session = TestSession(qp)
+        val session = TestSession("file", qp)
         val nextQuestion1 = session.nextQuestion()
         session.evaluateAnswer(nextQuestion1.question.answers[0])
         try {
