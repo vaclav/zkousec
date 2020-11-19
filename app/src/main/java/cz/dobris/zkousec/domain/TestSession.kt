@@ -22,6 +22,7 @@ class TestSession(
     init { }
 
     fun correctlyAnsweredQuestions(): List<QuestionStatus> = answeredCorrectly
+
     fun incorrectlyAnsweredQuestions(): List<QuestionStatus> = answeredIncorrectly
 
     fun remainingQuestions() = toProcess.size
@@ -52,7 +53,7 @@ class TestSession(
         "${it.question.position}:${it.given}:${it.answeredCorrectly}:${it.answeredIncorrectly}"
 
     companion object {
-        fun fromSession(qp: QuestionPack, entity: SessionEntity): TestSession {
+        fun fromSessionEntity(qp: QuestionPack, entity: SessionEntity): TestSession {
             val ah =
                 if (entity.answerHandler == "SimpleAnswerHandler") SimpleAnswerHandler() else RetryIncorrectAnswerHandler()
             val toProcess = parseList(qp, entity.toProcess)
@@ -124,8 +125,7 @@ class TestSession(
         fun handle(q: QuestionStatus, a: Answer, session: TestSession)
     }
 
-    class SimpleAnswerHandler :
-        AnswerHandler {
+    class SimpleAnswerHandler : AnswerHandler {
         override fun handle(q: QuestionStatus, a: Answer, session: TestSession) {
             session.toProcess.remove(q)
             q.given = +1

@@ -8,7 +8,6 @@ import android.os.PersistableBundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import cz.dobris.zkousec.db.DBHelper
-import cz.dobris.zkousec.db.SessionEntity
 import cz.dobris.zkousec.domain.TestSession
 import cz.dobris.zkousec.fileStorage.Storage
 import kotlinx.android.synthetic.main.activity_question_pack_setup2.*
@@ -32,7 +31,7 @@ class QuestionPackSetup : AppCompatActivity() {
             Log.d("Zkousec", "Loaded: " + qp.id + ":" + qp.version)
             TitleText.text = fileName.replace(".xml","")
             QuestionCount.text = "Počet otázek v sadě: " + qp.questions.size
-            //TODO show the numbers of correctly/incorrectly answered questions as well as the reaining ones
+            //TODO show the numbers of correctly/incorrectly answered questions as well as the remaining ones
             StartButton.setOnClickListener {
 
                 //TODO start a testing activity
@@ -41,7 +40,7 @@ class QuestionPackSetup : AppCompatActivity() {
                     val loaded = db.sessionDao().loadAllById(fileName)
                     val session = if (loaded != null) {
                         Log.d("Zkousec", "Reusing a session")
-                        TestSession.fromSession(qp, loaded)
+                        TestSession.fromSessionEntity(qp, loaded)
                     } else {
                         val newSession = TestSession(qp)
                         db.sessionDao().insert(newSession.toSessionEntity())
