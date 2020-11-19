@@ -33,7 +33,7 @@ class DefaultHandlersUnitTest {
     @Test
     fun simpleScenario() {
 //        assertEquals(4, 2 + 2)
-        val session = TestSession("file", qp)
+        val session = TestSession(qp)
         val nextQuestion1 = session.nextQuestion()
         val nextQuestion2 = session.nextQuestion()
         assert(nextQuestion1 == nextQuestion2)
@@ -68,7 +68,7 @@ class DefaultHandlersUnitTest {
 
     @Test
     fun doubleCallTo_evaluateAnswer() {
-        val session = TestSession("file", qp)
+        val session = TestSession(qp)
         val nextQuestion1 = session.nextQuestion()
         session.evaluateAnswer(nextQuestion1.question.answers[0])
         try {

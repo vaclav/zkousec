@@ -43,7 +43,7 @@ class QuestionPackSetup : AppCompatActivity() {
                         Log.d("Zkousec", "Reusing a session")
                         TestSession.fromSession(qp, loaded)
                     } else {
-                        val newSession = TestSession(fileName, qp)
+                        val newSession = TestSession(qp)
                         db.sessionDao().insert(newSession.toSessionEntity())
                         Log.d("Zkousec", "Created new session")
                         newSession

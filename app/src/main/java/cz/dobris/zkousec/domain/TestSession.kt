@@ -10,7 +10,6 @@ import java.lang.IllegalStateException
 import kotlin.random.Random
 
 class TestSession(
-    val id: String,
     qp: QuestionPack,
     initializer: SessionInitializer = AllQuestionsInitializer(),
     val answerHandler: AnswerHandler = SimpleAnswerHandler(),
@@ -18,14 +17,19 @@ class TestSession(
     private val answeredCorrectly: MutableList<QuestionStatus> = mutableListOf<QuestionStatus>(),
     private val answeredIncorrectly: MutableList<QuestionStatus> = mutableListOf<QuestionStatus>()
 ) {
-    init {
-    }
+    val id = qp.id
+
+    init { }
 
     fun correctlyAnsweredQuestions(): List<QuestionStatus> = answeredCorrectly
     fun incorrectlyAnsweredQuestions(): List<QuestionStatus> = answeredIncorrectly
+
     fun remainingQuestions() = toProcess.size
+
     fun completedQuestions() = answeredCorrectly.size + answeredIncorrectly.size
+
     fun totalQuestions() = remainingQuestions() + completedQuestions()
+
     fun nextQuestion() =
         if (remainingQuestions() > 0) toProcess.first() else throw IllegalStateException("The are no more questions to process.")
 
@@ -49,17 +53,16 @@ class TestSession(
 
     companion object {
         fun fromSession(qp: QuestionPack, entity: SessionEntity): TestSession {
-            val id = qp.id
             val ah =
                 if (entity.answerHandler == "SimpleAnswerHandler") SimpleAnswerHandler() else RetryIncorrectAnswerHandler()
             val toProcess = parseList(qp, entity.toProcess)
             val answeredCorrectly = parseList(qp, entity.answeredCorrectly)
             val answeredIncorrectly = parseList(qp, entity.answeredIncorrectly)
-            return TestSession(id, qp, AllQuestionsInitializer(), ah, toProcess, answeredCorrectly, answeredIncorrectly)
+            return TestSession(qp, AllQuestionsInitializer(), ah, toProcess, answeredCorrectly, answeredIncorrectly)
         }
 
         private fun parseList(qp: QuestionPack, entries: String?): MutableList<QuestionStatus> {
-Log.d("Zkousec", "Data read: " + entries)
+            Log.d("Zkousec", "Data read: " + entries)
             if (entries != null && entries.trim().length > 0) {
                 val l = mutableListOf<QuestionStatus>()
                 l.addAll(entries.split(",").map {
