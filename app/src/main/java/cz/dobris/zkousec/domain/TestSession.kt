@@ -21,6 +21,10 @@ class TestSession(
 
     init { }
 
+    //  ----------------- Business methods
+
+    class QuestionStatus(val question: Question, var given : Int = 0, var answeredCorrectly : Int = 0, var answeredIncorrectly : Int = 0) {}
+
     fun correctlyAnsweredQuestions(): List<QuestionStatus> = answeredCorrectly
 
     fun incorrectlyAnsweredQuestions(): List<QuestionStatus> = answeredIncorrectly
@@ -41,6 +45,8 @@ class TestSession(
         }
         answerHandler.handle(q, answer, this)
     }
+
+    //  ----------------- Database persistence code
 
     fun toSessionEntity(): SessionEntity {
         val toProcessString = toProcess.map { encodeQuestionStatus(it) }.joinToString()
@@ -76,7 +82,7 @@ class TestSession(
         }
     }
 
-    class QuestionStatus(val question: Question, var given : Int = 0, var answeredCorrectly : Int = 0, var answeredIncorrectly : Int = 0) {}
+    //  ----------------- Strategies for session initialization
 
     interface SessionInitializer {
         fun initialize(qp: QuestionPack): MutableList<QuestionStatus>
@@ -120,6 +126,8 @@ class TestSession(
             return statuses
         }
     }
+
+    //  ----------------- Strategies for answer handling
 
     interface AnswerHandler {
         fun handle(q: QuestionStatus, a: Answer, session: TestSession)
