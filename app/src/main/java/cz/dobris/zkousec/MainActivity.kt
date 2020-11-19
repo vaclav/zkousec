@@ -1,6 +1,5 @@
 package cz.dobris.zkousec
 
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -8,15 +7,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import cz.dobris.zkousec.fileStorage.Storage
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.url_dialog.*
 import kotlinx.android.synthetic.main.url_dialog.view.*
-import org.w3c.dom.Text
 
 
 class MainActivity : AppCompatActivity() {
@@ -52,12 +49,13 @@ class MainActivity : AppCompatActivity() {
             downloadDialogShown.getUrlButton.setOnClickListener {
                 val value = mDialogView.getUrlEditText.text.toString()
                 val urlByUser = if (value.trim().length > 0) value else "http://gpars.org/sample.xml"
+                val testName = mDialogView.getTestName.text.toString().trim()
                 downloadDialogShown.dismiss()
                 try {
                     Thread(Runnable {
                         Log.d("Zkousec", "Running in a new thread!")
                         try {
-                            Storage.saveQFileFromUrl(urlByUser, it.context)
+                            Storage.saveQFileFromUrl(urlByUser, testName, it.context)
                             v.post { refreshListOfQuestionPacks(arrayAdapter!!) }
                         }catch (e : Exception) {
                             e.printStackTrace()
