@@ -1,9 +1,6 @@
 package cz.dobris.zkousec
 
 import cz.dobris.zkousec.domain.TestSession
-import layout.Answer
-import layout.Question
-import layout.QuestionPack
 import org.junit.Test
 
 /**
@@ -12,28 +9,11 @@ import org.junit.Test
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class DefaultHandlersUnitTest {
-    val qp = QuestionPack("test", "Test", "1.0", listOf(
-        Question(0, "what?", listOf(
-            Answer(true),
-            Answer(false),
-            Answer(false)
-        )),
-        Question(1,"who?", listOf(
-            Answer(false),
-            Answer(true),
-            Answer(false)
-        )),
-        Question(2,"when?", listOf(
-            Answer(false),
-            Answer(false),
-            Answer(true)
-        ))
-    ))
 
     @Test
     fun simpleScenario() {
 //        assertEquals(4, 2 + 2)
-        val session = TestSession(qp)
+        val session = TestSession(TestHelper.treeElementQP)
         val nextQuestion1 = session.nextQuestion()
         val nextQuestion2 = session.nextQuestion()
         assert(nextQuestion1 == nextQuestion2)
@@ -68,7 +48,7 @@ class DefaultHandlersUnitTest {
 
     @Test
     fun doubleCallTo_evaluateAnswer() {
-        val session = TestSession(qp)
+        val session = TestSession(TestHelper.treeElementQP)
         val nextQuestion1 = session.nextQuestion()
         session.evaluateAnswer(nextQuestion1.question.answers[0])
         try {
