@@ -5,6 +5,8 @@ import layout.Answer
 import layout.Question
 import layout.QuestionPack
 import org.junit.Assert
+import java.lang.Exception
+import java.lang.IllegalArgumentException
 
 class TestHelper {
     companion object {
@@ -33,6 +35,14 @@ class TestHelper {
             Assert.assertEquals(completed, session.completedQuestions())
             Assert.assertEquals(correct, session.correctlyAnsweredQuestions().size)
             Assert.assertEquals(incorrect, session.incorrectlyAnsweredQuestions().size)
+        }
+
+        fun findAnswer(q: Question, correct: Boolean) : Answer {
+            for (answer in q.answers) {
+                if (answer.correct == correct)
+                    return answer
+            }
+            throw IllegalArgumentException ("Question '${q.text}', position: ${q.position} has no ${if (correct) "right" else "wrong"} answers")
         }
     }
 }
