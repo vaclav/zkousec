@@ -21,7 +21,12 @@ class TestSession(
 
     init { }
 
+    //  ----------------- Business methods
+
+    class QuestionStatus(val question: Question, var given : Int = 0, var answeredCorrectly : Int = 0, var answeredIncorrectly : Int = 0) {}
+
     fun correctlyAnsweredQuestions(): List<QuestionStatus> = answeredCorrectly
+
     fun incorrectlyAnsweredQuestions(): List<QuestionStatus> = answeredIncorrectly
 
     fun remainingQuestions() = toProcess.size
@@ -41,6 +46,8 @@ class TestSession(
         answerHandler.handle(q, answer, this)
     }
 
+    //  ----------------- Database persistence code
+
     fun toSessionEntity(): SessionEntity {
         val toProcessString = toProcess.map { encodeQuestionStatus(it) }.joinToString()
         val answeredCorrectlyString = answeredCorrectly.map { encodeQuestionStatus(it) }.joinToString()
@@ -52,7 +59,7 @@ class TestSession(
         "${it.question.position}:${it.given}:${it.answeredCorrectly}:${it.answeredIncorrectly}"
 
     companion object {
-        fun fromSession(qp: QuestionPack, entity: SessionEntity): TestSession {
+        fun fromSessionEntity(qp: QuestionPack, entity: SessionEntity): TestSession {
             val ah =
                 if (entity.answerHandler == "SimpleAnswerHandler") SimpleAnswerHandler() else RetryIncorrectAnswerHandler()
             val toProcess = parseList(qp, entity.toProcess)
@@ -75,7 +82,7 @@ class TestSession(
         }
     }
 
-    class QuestionStatus(val question: Question, var given : Int = 0, var answeredCorrectly : Int = 0, var answeredIncorrectly : Int = 0) {}
+    //  ----------------- Strategies for session initialization
 
     interface SessionInitializer {
         fun initialize(qp: QuestionPack): MutableList<QuestionStatus>
@@ -120,12 +127,13 @@ class TestSession(
         }
     }
 
+    //  ----------------- Strategies for answer handling
+
     interface AnswerHandler {
         fun handle(q: QuestionStatus, a: Answer, session: TestSession)
     }
 
-    class SimpleAnswerHandler :
-        AnswerHandler {
+    class SimpleAnswerHandler : AnswerHandler {
         override fun handle(q: QuestionStatus, a: Answer, session: TestSession) {
             session.toProcess.remove(q)
             q.given = +1
