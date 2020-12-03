@@ -79,23 +79,23 @@ class RetryIncorrectAnswerHandlerUnitTest {
     fun someRetries () {
         val session = TestSession (TestHelper.treeElementQP, answerHandler = TestSession.RetryIncorrectAnswerHandler (4))
         val nextQuestion1 = session.nextQuestion()
-        session.evaluateAnswer(TestHelper.findAnswer(nextQuestion1.question, false))
+        TestHelper.evaluateAnswer(session, false)
 
         for (j in 1..3) {
             for (i in 0..100) {
                 val nextQuestion = session.nextQuestion()
                 if (nextQuestion == nextQuestion1) {
-                    session.evaluateAnswer(TestHelper.findAnswer(nextQuestion.question, false))
+                    TestHelper.evaluateAnswer(session, false)
                     break
                 }
-                session.evaluateAnswer(TestHelper.findAnswer(nextQuestion.question, true))
+                TestHelper.evaluateAnswer(session, true)
                 if (i == 100) assert(false)
             }
         }
         Assert.assertEquals(4, nextQuestion1.given)
         while (session.remainingQuestions() > 0) {
             val nextQuestion = session.nextQuestion()
-            session.evaluateAnswer (TestHelper.findAnswer(nextQuestion.question, true))
+            TestHelper.evaluateAnswer(session, true)
         }
         TestHelper.assertSizes(session, 3, 0, 3, 2, 1)
     }
