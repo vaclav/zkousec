@@ -44,5 +44,13 @@ class TestHelper {
             }
             throw IllegalArgumentException ("Question '${q.text}', position: ${q.position} has no ${if (correct) "right" else "wrong"} answers")
         }
+        /*
+        fun SubsetInitializeSesionTest(testSize: Int, remainingQuestions: Int){
+            val session = TestSession(TestHelper.treeElementQP, TestSession.SubsetQuestionsInitializer(testSize))
+            val nextQuestion1 = session.nextQuestion()
+            //assert(session.remainingQuestions() == remainingQuestions)
+        }
+        */
+
     }
 }

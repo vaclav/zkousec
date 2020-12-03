@@ -5,8 +5,7 @@ import cz.dobris.zkousec.db.SessionEntity
 import layout.Answer
 import layout.Question
 import layout.QuestionPack
-import java.lang.IllegalArgumentException
-import java.lang.IllegalStateException
+import kotlin.IllegalArgumentException
 import kotlin.random.Random
 
 class TestSession(
@@ -109,7 +108,8 @@ class TestSession(
         //TODO test for 0 or negative values
         override fun initialize(qp: QuestionPack): MutableList<QuestionStatus> {
             val statuses = mutableListOf<QuestionStatus>()
-            val count = if (testSize < qp.questions.size) testSize else qp.questions.size
+            if (testSize <= 0) throw IllegalArgumentException("TestSize must be > 1")
+            val count = if (testSize <= qp.questions.size) testSize else throw IllegalArgumentException("QuestionPack is smaller than testSize")
             val random = Random(System.currentTimeMillis())
             val alreadyIncludedQuestionIndexes = mutableListOf<Int>()
             for (i in 0..count - 1) {
