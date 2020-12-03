@@ -136,13 +136,13 @@ class TestSession(
     class SimpleAnswerHandler : AnswerHandler {
         override fun handle(q: QuestionStatus, a: Answer, session: TestSession) {
             session.toProcess.remove(q)
-            q.given = +1
+            q.given += 1
             if (a.correct) {
                 session.answeredCorrectly.add(q)
-                q.answeredCorrectly = +1
+                q.answeredCorrectly += 1
             } else {
                 session.answeredIncorrectly.add(q)
-                q.answeredIncorrectly = +1
+                q.answeredIncorrectly += 1
             }
         }
     }
@@ -154,12 +154,12 @@ class TestSession(
 
         override fun handle(q: QuestionStatus, a: Answer, session: TestSession) {
             session.toProcess.remove(q)
-            q.given = +1
+            q.given += 1
             if (a.correct) {
                 session.answeredCorrectly.add(q)
-                q.answeredCorrectly = +1
+                q.answeredCorrectly += 1
             } else {
-                q.answeredIncorrectly = +1
+                q.answeredIncorrectly += 1
                 if (q.answeredIncorrectly < numberOfRetries) {
                     val nextInt = random.nextInt(session.toProcess.size)
                     session.toProcess.add(nextInt, q)
