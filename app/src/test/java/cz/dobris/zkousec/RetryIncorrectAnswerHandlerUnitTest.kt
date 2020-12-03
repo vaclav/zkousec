@@ -27,6 +27,7 @@ class RetryIncorrectAnswerHandlerUnitTest {
         for (i in 0..100) {
             val nextQuestion = session.nextQuestion()
             session.evaluateAnswer(TestHelper.findAnswer(nextQuestion.question, false))
+            TestHelper.assertSizes(session, 3, 2, 1, 1, 0)
             assert(nextQuestion != nextQuestion3)
         }
 
