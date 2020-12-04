@@ -8,7 +8,7 @@ interface SessionDao {
     fun getAll(): List<SessionEntity>
 
     @Query("SELECT * FROM SessionEntity WHERE uid == :sessionId")
-    fun loadAllById(sessionId: String): SessionEntity
+    fun loadAllById(sessionId: String): SessionEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg sessions: SessionEntity)

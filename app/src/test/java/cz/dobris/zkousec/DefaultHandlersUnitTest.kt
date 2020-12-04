@@ -1,6 +1,7 @@
 package cz.dobris.zkousec
 
 import cz.dobris.zkousec.domain.TestSession
+import org.junit.Assert
 import org.junit.Test
 
 /**
@@ -20,7 +21,6 @@ class DefaultHandlersUnitTest {
         session.evaluateAnswer(nextQuestion1.question.answers[0])
         TestHelper.assertSizes(session, 3, 2, 1, 1, 0)
         assert(nextQuestion1 == session.correctlyAnsweredQuestions().first())
-
         val nextQuestion3 = session.nextQuestion()
         assert(nextQuestion1 != nextQuestion3)
         session.evaluateAnswer(nextQuestion3.question.answers[0])
@@ -42,7 +42,7 @@ class DefaultHandlersUnitTest {
 
         try {
             session.nextQuestion()
-            assert(false)
+            Assert.fail()
         } catch (t: Throwable) { }
     }
 
@@ -53,7 +53,7 @@ class DefaultHandlersUnitTest {
         session.evaluateAnswer(nextQuestion1.question.answers[0])
         try {
             session.evaluateAnswer(nextQuestion1.question.answers[1])
-            assert(false)
+            Assert.fail()
         } catch (t: Throwable) {}
         TestHelper.assertSizes(session, 3, 2, 1, 1, 0)
         assert(nextQuestion1 == session.correctlyAnsweredQuestions().first())

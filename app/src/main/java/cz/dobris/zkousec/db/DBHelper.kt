@@ -1,19 +1,39 @@
 package cz.dobris.zkousec.db
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Room
+import cz.dobris.zkousec.domain.TestSession
+import cz.dobris.zkousec.fileStorage.Storage
 
 class DBHelper {
     companion object {
-        private var db : ZkousecDatabase? = null
+        private fun buildDatabase(context : Context) : ZkousecDatabase =
+            Room.databaseBuilder(context, ZkousecDatabase::class.java, "database-name").build()
 
-        fun instance(context : Context) : ZkousecDatabase {
-            if (db == null) {
-                val databaseBuilder =
-                    Room.databaseBuilder(context, ZkousecDatabase::class.java, "database-name")
-                db = databaseBuilder.build()
+        fun getTestSession(context: Context, fileName : String) : TestSession {
+            val sessionDatabase = DBHelper.buildDatabase(context).sessionDao()
+            val loadedSessionEntity = sessionDatabase.loadAllById(fileName)
+            val qp = Storage.loadQFile(fileName, context)
+            return if (loadedSessionEntity != null) {
+                TestSession.fromSessionEntity(qp, loadedSessionEntity)
+            } else {
+                val newSession = TestSession(qp)
+                sessionDatabase.insert(newSession.toSessionEntity())
+                Log.d("Zkousec", "Created new session")
+                newSession
             }
-            return db!!
+        }
+
+        fun saveTestSession(context: Context, session : TestSession) {
+            val sessionDatabase = DBHelper.buildDatabase(context).sessionDao()
+            sessionDatabase.update(session.toSessionEntity())
+        }
+
+        fun deleteTestSession(context: Context, fileName : String) {
+            val sessionDatabase = DBHelper.buildDatabase(context).sessionDao()
+            val loadedSessionEntity = sessionDatabase.loadAllById(fileName)
+            if (loadedSessionEntity != null) sessionDatabase.delete(loadedSessionEntity)
         }
     }
 }

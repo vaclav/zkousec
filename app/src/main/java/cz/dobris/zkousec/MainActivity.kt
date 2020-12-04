@@ -18,22 +18,20 @@ import kotlinx.android.synthetic.main.url_dialog.view.*
 
 class MainActivity : AppCompatActivity() {
 
-    var arrayAdapter: ArrayAdapter<String>? = null
+    lateinit var arrayAdapter: ArrayAdapter<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // TODO: Add button and img to each item in the list
-
         arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1)
         listOfButtons.adapter = arrayAdapter
-        refreshListOfQuestionPacks(arrayAdapter!!)
+        refreshListOfQuestionPacks(arrayAdapter)
 
         listOfButtons.setOnItemClickListener { adapterView, view, position, id ->
             val intent = Intent (this, QuestionPackSetup::class.java)
-            val item = arrayAdapter!!.getItem(position)
-            intent.putExtra("FILE_NAME", item);
+            val item = arrayAdapter.getItem(position)
+            intent.putExtra("FILE_NAME", item)
             startActivity (intent)
         }
 
@@ -56,7 +54,7 @@ class MainActivity : AppCompatActivity() {
                         Log.d("Zkousec", "Running in a new thread!")
                         try {
                             Storage.saveQFileFromUrl(urlByUser, testName, it.context)
-                            v.post { refreshListOfQuestionPacks(arrayAdapter!!) }
+                            v.post { refreshListOfQuestionPacks(arrayAdapter) }
                         }catch (e : Exception) {
                             e.printStackTrace()
                             v.post { Toast.makeText(this, "Cannot download the file. " + e.message ,Toast.LENGTH_SHORT).show() }
@@ -78,7 +76,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        refreshListOfQuestionPacks(arrayAdapter!!)
+        refreshListOfQuestionPacks(arrayAdapter)
     }
 
     fun refreshListOfQuestionPacks(arrayAdapter: ArrayAdapter<String>) {
