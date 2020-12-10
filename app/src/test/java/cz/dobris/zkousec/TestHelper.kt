@@ -30,11 +30,11 @@ class TestHelper {
 
 
         fun assertSizes(session: TestSession, total: Int, remaining: Int, completed: Int, correct: Int, incorrect: Int) {
-            Assert.assertEquals(total, session.totalQuestions())
-            Assert.assertEquals(remaining, session.remainingQuestions())
-            Assert.assertEquals(completed, session.completedQuestions())
-            Assert.assertEquals(correct, session.correctlyAnsweredQuestions().size)
-            Assert.assertEquals(incorrect, session.incorrectlyAnsweredQuestions().size)
+            Assert.assertEquals("Error in total questions", total, session.totalQuestions())
+            Assert.assertEquals("Error in remaining questions", remaining, session.remainingQuestions())
+            Assert.assertEquals("Error in completed questions", completed, session.completedQuestions())
+            Assert.assertEquals("Error in correct questions", correct, session.correctlyAnsweredQuestions().size)
+            Assert.assertEquals("Error in incorrect questions", incorrect, session.incorrectlyAnsweredQuestions().size)
         }
 
         fun findAnswer(q: Question, correct: Boolean) : Answer {
@@ -44,13 +44,9 @@ class TestHelper {
             }
             throw IllegalArgumentException ("Question '${q.text}', position: ${q.position} has no ${if (correct) "right" else "wrong"} answers")
         }
-        /*
-        fun SubsetInitializeSesionTest(testSize: Int, remainingQuestions: Int){
-            val session = TestSession(TestHelper.treeElementQP, TestSession.SubsetQuestionsInitializer(testSize))
-            val nextQuestion1 = session.nextQuestion()
-            //assert(session.remainingQuestions() == remainingQuestions)
-        }
-        */
 
+        fun evaluateAnswer(session: TestSession, correct: Boolean) {
+            session.evaluateAnswer(findAnswer(session.nextQuestion().question, correct))
+        }
     }
 }

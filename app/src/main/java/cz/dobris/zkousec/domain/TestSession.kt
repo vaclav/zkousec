@@ -9,7 +9,7 @@ import kotlin.IllegalArgumentException
 import kotlin.random.Random
 
 class TestSession(
-    qp: QuestionPack,
+    val qp: QuestionPack,
     initializer: SessionInitializer = AllQuestionsInitializer(),
     val answerHandler: AnswerHandler = SimpleAnswerHandler(),
     private val toProcess: MutableList<QuestionStatus> = initializer.initialize(qp),
@@ -105,7 +105,6 @@ class TestSession(
 
     class SubsetQuestionsInitializer(val testSize: Int = Int.MAX_VALUE) :
         SessionInitializer {
-        //TODO test for 0 or negative values
         override fun initialize(qp: QuestionPack): MutableList<QuestionStatus> {
             val statuses = mutableListOf<QuestionStatus>()
             if (testSize <= 0) throw IllegalArgumentException("TestSize must be > 1")
@@ -136,30 +135,29 @@ class TestSession(
     class SimpleAnswerHandler : AnswerHandler {
         override fun handle(q: QuestionStatus, a: Answer, session: TestSession) {
             session.toProcess.remove(q)
-            q.given = +1
+            q.given += 1
             if (a.correct) {
                 session.answeredCorrectly.add(q)
-                q.answeredCorrectly = +1
+                q.answeredCorrectly += 1
             } else {
                 session.answeredIncorrectly.add(q)
-                q.answeredIncorrectly = +1
+                q.answeredIncorrectly += 1
             }
         }
     }
 
     class RetryIncorrectAnswerHandler(val numberOfRetries: Int = Int.MAX_VALUE) :
         AnswerHandler {
-        //TODO test for 0 or negative values
         val random = Random(System.currentTimeMillis())
 
         override fun handle(q: QuestionStatus, a: Answer, session: TestSession) {
             session.toProcess.remove(q)
-            q.given = +1
+            q.given += 1
             if (a.correct) {
                 session.answeredCorrectly.add(q)
-                q.answeredCorrectly = +1
+                q.answeredCorrectly += 1
             } else {
-                q.answeredIncorrectly = +1
+                q.answeredIncorrectly += 1
                 if (q.answeredIncorrectly < numberOfRetries) {
                     val nextInt = random.nextInt(session.toProcess.size)
                     session.toProcess.add(nextInt, q)
