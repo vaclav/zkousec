@@ -40,6 +40,10 @@ class QuestionPackSetup : AppCompatActivity() {
         StartButton.setOnClickListener {
             val nextQuestion = session.nextQuestion()
             session.evaluateAnswer(nextQuestion.question.answers[0])
+            intent = Intent(this, QuestionPackTesting::class.java)
+           // val intent = Intent (this, QuestionPackTesting::class.java)
+            intent.putExtra("FILE_NAME", fileName)
+            startActivity(intent)
             //TODO start a testing activity
         }
         DeleteButton.setOnClickListener {
