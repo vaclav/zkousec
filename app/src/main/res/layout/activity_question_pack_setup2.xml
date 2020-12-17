@@ -28,12 +28,46 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:capitalize="none"
-        android:text="0"
+        android:text="QuestionCount"
         android:textAlignment="center"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal|center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:srcCompat="@drawable/correcttick" />
+
+        <TextView
+            android:id="@+id/CorrectlyAnsweredCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="30sp" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:srcCompat="@drawable/incorrecttick" />
+
+        <TextView
+            android:id="@+id/IncorrectlyAnsweredCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="30sp" />
+
+    </TableRow>
 
     <TextView
         android:id="@+id/ToProcessCount"
@@ -41,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:capitalize="none"
-        android:text="0"
+        android:text="ToProcessCount"
         android:textAlignment="center"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
