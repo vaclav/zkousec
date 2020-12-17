@@ -12,6 +12,9 @@ class QuestionPackTesting : AppCompatActivity() {
 
     lateinit var fileName : String
     lateinit var session: TestSession
+    override fun onStart() {
+        super.onStart()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +29,19 @@ class QuestionPackTesting : AppCompatActivity() {
                 setTitle(fileName)
                 RemainingQuestionsText.text = "Remaining questions: " + session.remainingQuestions().toString()
             }
+        }
         NextQuestionButton.setOnClickListener {
-            DBHelper.saveTestSession(this,session)
+            val handler = Handler()
+            thread {
+                session.evaluateAnswer(session.nextQuestion().question.answers[0])
+                val nextQuestion = session.nextQuestion()
+                DBHelper.saveTestSession(this, session)
+                // TODO
+                handler.post{
+                    QuestionText.text = session.nextQuestion().question.text
+                    setTitle(fileName)
+                    RemainingQuestionsText.text = "Remaining questions: " + session.remainingQuestions().toString()
+                }
             }
         }
     }
