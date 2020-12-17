@@ -14,7 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:capitalize="none"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
         android:text="Title"
         android:textAlignment="center"
         android:textSize="30sp"
@@ -27,10 +28,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:capitalize="none"
         android:text="QuestionCount"
         android:textAlignment="center"
-        android:textSize="30sp"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/ToProcessCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="32dp"
+        android:text="ToProcessCount"
+        android:textAlignment="center"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -68,19 +81,6 @@
             android:textSize="30sp" />
 
     </TableRow>
-
-    <TextView
-        android:id="@+id/ToProcessCount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:capitalize="none"
-        android:text="ToProcessCount"
-        android:textAlignment="center"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/TestingOptions"
@@ -121,9 +121,13 @@
     <Button
         android:id="@+id/StartButton"
         android:layout_width="wrap_content"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:background="@drawable/roundstyle"
         android:text="Start"
+        android:backgroundTint="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TitleText" />

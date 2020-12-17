@@ -84,7 +84,6 @@ class QuestionPackTesting : AppCompatActivity() {
                 }
             }
     fun setAnswerButtonsTextHelper(answerButton : Button, questionNumber : Int){
-
         answerButton.text = session.nextQuestion().question.answers[questionNumber].toString()
     }
 }

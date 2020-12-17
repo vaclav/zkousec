@@ -9,9 +9,12 @@
     <Button
         android:id="@+id/addQuestionPackButton"
         android:layout_width="wrap_content"
+        android:paddingLeft="20sp"
+        android:paddingRight="20sp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="Add question pack"
+        android:background="@drawable/roundstyle"
         android:textStyle="bold"
         android:textColor="@android:color/white"
         android:backgroundTint="@color/colorPrimary"
