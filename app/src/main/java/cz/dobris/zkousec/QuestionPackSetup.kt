@@ -26,8 +26,8 @@ class QuestionPackSetup : AppCompatActivity() {
             handler.post {
                 QuestionCount.text = "Počet otázek v sadě: " + session.qp.questions.size
                 //TODO show the numbers of correctly/incorrectly answered questions as well as the remaining ones
-                CorrectlyAnsweredCount.text = session.correctlyAnsweredQuestions().toString();
-                IncorrectlyAnsweredCount.text = session.incorrectlyAnsweredQuestions().toString();
+                CorrectlyAnsweredCount.text = session.correctlyAnsweredQuestions().size.toString();
+                IncorrectlyAnsweredCount.text = session.incorrectlyAnsweredQuestions().size.toString();
                 ToProcessCount.text = "Zbývající otázky: " + session.remainingQuestions().toString()
             }
         }
