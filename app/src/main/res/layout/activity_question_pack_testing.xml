@@ -13,37 +13,59 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingBottom="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/NextQuestionButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/RemainingQuestionsText">
 
-        <Button
-            android:id="@+id/AnswerButton1"
-            android:layout_width="wrap_content"
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/TestingOptions"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="-----" />
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="64dp"
+            app:chipSpacingVertical="4dp"
+            app:singleLine="false"
+            app:singleSelection="true">
 
-        <Button
-            android:id="@+id/AnswerButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="-----" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/AnswerChip1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:clickable="true"
+                android:text="Answer 1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
-        <Button
-            android:id="@+id/AnswerButton3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="-----" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/AnswerChip2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:clickable="true"
+                android:text="Answer 2"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
-        <Button
-            android:id="@+id/AnswerButton4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="-----" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/AnswerChip3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:clickable="true"
+                android:text="Answer 3"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/AnswerChip4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:clickable="true"
+                android:text="Answer 4"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+        </com.google.android.material.chip.ChipGroup>
+
+
 
     </LinearLayout>
 
