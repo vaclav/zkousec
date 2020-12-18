@@ -36,12 +36,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         //This part of code shows dialog to user with text field for downloading Question Pack from URL.
-        //URL is saved in "urlByUser"
         addQuestionPackButton.setOnClickListener{v ->
             val mDialogView = LayoutInflater.from(this).inflate(R.layout.url_dialog, null)
             val downloadDialog = AlertDialog.Builder(this)
                 .setView(mDialogView)
-                .setTitle("Download Question Pack (leave empty to get a sample file)")
+                .setTitle("Download Question Pack")
                 val downloadDialogShown = downloadDialog.show()
 
             downloadDialogShown.getUrlButton.setOnClickListener {

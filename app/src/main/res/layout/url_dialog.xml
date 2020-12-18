@@ -6,6 +6,13 @@
     android:orientation="vertical"
     android:padding="10dp">
 
+    <TextView
+        android:id="@+id/additionalInfoText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Leave empty to get a sample file." />
+
     <EditText
         android:id="@+id/getUrlEditText"
         android:layout_width="match_parent"

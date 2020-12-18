@@ -24,11 +24,11 @@ class QuestionPackSetup : AppCompatActivity() {
         thread {
             session = DBHelper.getTestSession(this, fileName)
             handler.post {
-                QuestionCount.text = "Počet otázek v sadě: " + session.qp.questions.size
+                QuestionCount.text = "Number of questions in the set: " + session.qp.questions.size
                 //TODO show the numbers of correctly/incorrectly answered questions as well as the remaining ones
                 CorrectlyAnsweredCount.text = session.correctlyAnsweredQuestions().size.toString();
                 IncorrectlyAnsweredCount.text = session.incorrectlyAnsweredQuestions().size.toString();
-                ToProcessCount.text = "Zbývající otázky: " + session.remainingQuestions().toString()
+                ToProcessCount.text = "Remaining questions: " + session.remainingQuestions().toString()
             }
         }
         TitleText.text = fileName.replace(".xml", "")
