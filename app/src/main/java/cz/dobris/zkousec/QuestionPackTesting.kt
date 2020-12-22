@@ -5,22 +5,23 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import androidx.core.view.get
+import android.widget.Toast
 import androidx.core.view.isVisible
 import com.google.android.material.chip.Chip
 import cz.dobris.zkousec.db.DBHelper
 import cz.dobris.zkousec.domain.TestSession
 import kotlinx.android.synthetic.main.activity_question_pack_testing.*
 import layout.Answer
+import layout.Question
 import kotlin.concurrent.thread
 
 class QuestionPackTesting : AppCompatActivity() {
 
     lateinit var fileName : String
     lateinit var session: TestSession
+    var continueFinal = false;
     override fun onStart() {
         super.onStart()
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,9 +29,7 @@ class QuestionPackTesting : AppCompatActivity() {
         setContentView(R.layout.activity_question_pack_testing)
 
         fileName = intent.getStringExtra("FILE_NAME") ?: ""
-        title = fileName
         val handler = Handler()
-        val continueButtonFinal = false
 
         thread {
             session = DBHelper.getTestSession(this, fileName)
@@ -38,39 +37,61 @@ class QuestionPackTesting : AppCompatActivity() {
                 QuestionText.text = session.nextQuestion().question.text
                 title = fileName.replace(".xml","")
                 RemainingQuestionsText.text = "Remaining questions: " + session.remainingQuestions().toString()
+                ContinueButton.text = "Check"
                 setAnswerButtonsText()
+            }
+        }
+        ContinueButton.setOnClickListener {
+            if (!continueFinal){
+                handler.post(){
+                    showCorrectAnswer() //TODO show answer for last question in the set
+                    ContinueButton.text = "CONTINUE"
+                    continueFinal = true
+                }
+            }else{
+                thread {
+                    session.evaluateAnswer(session.nextQuestion().question.answers[getNumberOfCheckedChipById()])
+                    DBHelper.saveTestSession(this, session)
+                    handler.post(){
+                        if (session.remainingQuestions() > 0){
+                            showNextQuestion()
+                            ContinueButton.text = "Check"
+                            AnswerChip1.isClickable = true
+                            AnswerChip2.isClickable = true
+                            AnswerChip3.isClickable = true
+                            AnswerChip4.isClickable = true
+                            ContinueButton.isVisible = false
+                            continueFinal = false
+                        }else{
+                            QuestionText.text = "No more questions"
+                            RemainingQuestionsText.text = "Remaining questions: 0"
+                            AnswerChips.isVisible = false
+                            ContinueButton.isVisible = false
+                        }
+                    }
+                }
+                //  setAnswerChipsColorToDefault()
+
             }
         }
         AnswerChips.setOnCheckedChangeListener { AnswerChips, i ->
             ContinueButton.isVisible = true
         }
-        ContinueButton.setOnClickListener {
-            val handler = Handler()
-            thread {
-                session.evaluateAnswer(session.nextQuestion().question.answers[getNumberOfCheckedChipById()])
-                DBHelper.saveTestSession(this, session)
-                // TODO
-
-                handler.post{
-                    if (1 >= session.remainingQuestions()) ContinueButton.isVisible = false
-                    if (continueButtonFinal){
-                        QuestionText.text = session.nextQuestion().question.text
-                        RemainingQuestionsText.text = "Remaining questions: " + session.remainingQuestions().toString()
-                    }else{
-                        setAnswerButtonsText()
-                    }
-                }
-            }
-        }
-
     }
+
+
+
+
+
+
+
     private fun setAnswerButtonsText(){
-        val numberOfQuestion = session.nextQuestion().question.answers.size
+        val numberOfAnswers = session.nextQuestion().question.answers.size
         AnswerChip1.visibility = View.VISIBLE
         AnswerChip2.visibility = View.VISIBLE
         AnswerChip3.visibility = View.VISIBLE
         AnswerChip4.visibility = View.VISIBLE
-        when(numberOfQuestion){
+        when(numberOfAnswers){
             2 -> {
                 setAnswerButtonsTextHelper(AnswerChip1, 0)
                 setAnswerButtonsTextHelper(AnswerChip2, 1)
@@ -106,23 +127,53 @@ class QuestionPackTesting : AppCompatActivity() {
             else -> throw IllegalArgumentException("Unknown chip ID")
         }
     }
-    // TODO: Show correct answer
-    /*
-    private fun getChipByNumber(int: Int):Chip{
-        when(int){
-            0 -> return AnswerCh ip1
-            1 -> return AnswerChip2
-            2 -> return AnswerChip3
-            3 -> return AnswerChip4
-            else -> throw IllegalArgumentException("Unknow Number Of Chip")
-        }
-    }*/
 
-    /*
     private fun showCorrectAnswer(){
-        if (session.nextQuestion().question.answers[getNumberOfCheckedChipById()].correct)
+        val correctAnswer = findAnswer(session.nextQuestion().question, true).toString()
+        AnswerChip1.isClickable = false
+        AnswerChip2.isClickable =false
+        AnswerChip3.isClickable = false
+        AnswerChip4.isClickable =false
+
+        if (correctAnswer == AnswerChip1.text) AnswerChip1.background.setTint(Color.GREEN)
+            else AnswerChip1.background.setTint(Color.RED)
+
+        if (correctAnswer == AnswerChip2.text) AnswerChip2.background.setTint(Color.GREEN)
+            else AnswerChip2.background.setTint(Color.RED)
+
+        if (correctAnswer == AnswerChip3.text) AnswerChip3.background.setTint(Color.GREEN)
+            else AnswerChip3.background.setTint(Color.RED)
+
+        if (correctAnswer == AnswerChip4.text) AnswerChip4.background.setTint(Color.GREEN)
+            else AnswerChip4.background.setTint(Color.RED)
+        //if (session.nextQuestion().question.answers[getNumberOfCheckedChipById()].correct)
     }
-    */
+
+
+    // TODO: handle multiple answers
+    private fun findAnswer(q: Question, correct: Boolean) : Answer {
+        for (answer in q.answers) {
+            if (answer.correct == correct)
+                return answer
+
+        }
+        throw java.lang.IllegalArgumentException("Question '${q.text}', position: ${q.position} has no ${if (correct) "right" else "wrong"} answers")
+    }
+    private fun showNextQuestion(){
+        QuestionText.text = session.nextQuestion().question.text
+        RemainingQuestionsText.text = "Remaining questions: " + session.remainingQuestions().toString()
+        setAnswerButtonsText()
+        AnswerChip1.isChecked = false
+        AnswerChip2.isChecked = false
+        AnswerChip3.isChecked = false
+        AnswerChip4.isChecked = false
+    }
+    private fun setAnswerChipsColorToDefault(){
+        AnswerChip1.backgroundTintMode = null
+        AnswerChip2.backgroundTintMode = null
+        AnswerChip3.backgroundTintMode = null
+        AnswerChip4.backgroundTintMode = null
+    }
 
 
 }

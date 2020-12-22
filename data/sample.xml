@@ -43,7 +43,7 @@
                 <text>safdaf</text>
             </part>
             <answers>
-                <a>dsafdf</a>
+                <a correct="true">dsafdf</a>
                 <a>dsafdsf</a>
             </answers>
         </question>
