@@ -12,11 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".QuestionPackResults"></activity>
-        <activity android:name=".QuestionPackTesting"></activity>
+        <activity android:name=".QPLearningActivity"></activity>
+        <activity android:name=".QPTestResultsActivity" />
+        <activity android:name=".QPTestingActivity" />
         <activity
-            android:name=".QuestionPackSetup"
-            android:parentActivityName=".MainActivity"></activity>
+            android:name=".QPSetupActivity"
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

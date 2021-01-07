@@ -7,7 +7,7 @@
     android:layout_gravity="center_horizontal"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".QuestionPackSetup">
+    tools:context=".QPSetupActivity">
 
     <TextView
         android:id="@+id/TitleText"
@@ -88,7 +88,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        app:checkedChip="@id/chip"
+        app:checkedChip="@id/chipLearn"
         app:chipSpacingVertical="@dimen/_4sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
@@ -98,7 +98,7 @@
         app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip"
+            android:id="@+id/chipLearn"
             android:layout_width="@dimen/_200sdp"
             android:layout_height="@dimen/_20sdp"
             android:checkable="true"
@@ -108,7 +108,7 @@
             android:textSize="@dimen/_14ssp" />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip2"
+            android:id="@+id/chipTest"
             android:layout_width="@dimen/_200sdp"
             android:layout_height="@dimen/_20sdp"
             android:checkable="true"

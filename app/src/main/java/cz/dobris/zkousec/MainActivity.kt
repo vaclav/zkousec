@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         refreshListOfQuestionPacks(arrayAdapter)
 
         listOfButtons.setOnItemClickListener { adapterView, view, position, id ->
-            val intent = Intent (this, QuestionPackSetup::class.java)
+            val intent = Intent (this, QPSetupActivity::class.java)
             val item = arrayAdapter.getItem(position)
             intent.putExtra("FILE_NAME", item)
             startActivity (intent)
