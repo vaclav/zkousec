@@ -70,7 +70,7 @@ class QuestionPackTesting : AppCompatActivity() {
                         }
                     }
                 }
-                //  setAnswerChipsColorToDefault()
+                setAnswerChipsColorToDefault()
 
             }
         }
@@ -78,12 +78,6 @@ class QuestionPackTesting : AppCompatActivity() {
             ContinueButton.isVisible = true
         }
     }
-
-
-
-
-
-
 
     private fun setAnswerButtonsText(){
         val numberOfAnswers = session.nextQuestion().question.answers.size
@@ -169,10 +163,10 @@ class QuestionPackTesting : AppCompatActivity() {
         AnswerChip4.isChecked = false
     }
     private fun setAnswerChipsColorToDefault(){
-        AnswerChip1.backgroundTintMode = null
-        AnswerChip2.backgroundTintMode = null
-        AnswerChip3.backgroundTintMode = null
-        AnswerChip4.backgroundTintMode = null
+        AnswerChip1.background.setTintList(null)
+        AnswerChip2.background.setTintList(null)
+        AnswerChip3.background.setTintList(null)
+        AnswerChip4.background.setTintList(null)
     }
 
 
