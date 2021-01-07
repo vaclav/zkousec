@@ -15,7 +15,7 @@ import layout.Answer
 import layout.Question
 import kotlin.concurrent.thread
 
-class QuestionPackTesting : AppCompatActivity() {
+class QPTestingActivity : AppCompatActivity() {
 
     lateinit var fileName : String
     lateinit var session: TestSession
@@ -29,6 +29,9 @@ class QuestionPackTesting : AppCompatActivity() {
         setContentView(R.layout.activity_question_pack_testing)
 
         fileName = intent.getStringExtra("FILE_NAME") ?: ""
+
+        val testChipFromIntent = intent.getBooleanExtra("TEST", false)
+        val learnChipFromIntent = intent.getBooleanExtra("LEARN", false)
         val handler = Handler()
 
         thread {
@@ -42,37 +45,46 @@ class QuestionPackTesting : AppCompatActivity() {
             }
         }
         ContinueButton.setOnClickListener {
-            if (!continueFinal){
-                handler.post(){
-                    showCorrectAnswer() //TODO show answer for last question in the set
-                    ContinueButton.text = "CONTINUE"
-                    continueFinal = true
-                }
-            }else{
-                thread {
-                    session.evaluateAnswer(session.nextQuestion().question.answers[getNumberOfCheckedChipById()])
-                    DBHelper.saveTestSession(this, session)
-                    handler.post(){
-                        if (session.remainingQuestions() > 0){
-                            showNextQuestion()
-                            ContinueButton.text = "Check"
-                            AnswerChip1.isClickable = true
-                            AnswerChip2.isClickable = true
-                            AnswerChip3.isClickable = true
-                            AnswerChip4.isClickable = true
-                            ContinueButton.isVisible = false
-                            continueFinal = false
-                        }else{
-                            QuestionText.text = "No more questions"
-                            RemainingQuestionsText.text = "Remaining questions: 0"
-                            AnswerChips.isVisible = false
-                            ContinueButton.isVisible = false
+            when(true){
+                testChipFromIntent -> {
+                    if (!continueFinal){
+                        handler.post(){
+                            showCorrectAnswer() //TODO show answer for last question in the set
+                            ContinueButton.text = "CONTINUE"
+                            continueFinal = true
                         }
+                    }else{
+                        thread {
+                            session.evaluateAnswer(session.nextQuestion().question.answers[getNumberOfCheckedChipById()])
+                            DBHelper.saveTestSession(this, session)
+                            handler.post(){
+                                if (session.remainingQuestions() > 0){
+                                    showNextQuestion()
+                                    ContinueButton.text = "Check"
+                                    AnswerChip1.isClickable = true
+                                    AnswerChip2.isClickable = true
+                                    AnswerChip3.isClickable = true
+                                    AnswerChip4.isClickable = true
+                                    ContinueButton.isVisible = false
+                                    continueFinal = false
+                                }else{
+                                    QuestionText.text = "No more questions"
+                                    RemainingQuestionsText.text = "Remaining questions: 0"
+                                    AnswerChips.isVisible = false
+                                    ContinueButton.isVisible = false
+                                }
+                            }
+                        }
+                        setAnswerChipsColorToDefault()
                     }
                 }
-                setAnswerChipsColorToDefault()
-
+                learnChipFromIntent -> {
+                    // TODO: learn mode
+                }
+                else -> throw IllegalArgumentException("None of the chips were checked")
             }
+
+
         }
         AnswerChips.setOnCheckedChangeListener { AnswerChips, i ->
             ContinueButton.isVisible = true

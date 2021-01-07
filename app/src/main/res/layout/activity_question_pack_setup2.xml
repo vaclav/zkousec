@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:layout_gravity="center"
     android:gravity="center"
-    tools:context=".QuestionPackSetup">
+    tools:context=".QPSetupActivity">
 
     <TextView
         android:id="@+id/TitleText"
