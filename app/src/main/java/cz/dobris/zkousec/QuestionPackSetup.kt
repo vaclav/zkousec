@@ -5,7 +5,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import cz.dobris.zkousec.db.DBHelper
 import cz.dobris.zkousec.domain.TestSession
@@ -40,11 +39,10 @@ class QuestionPackSetup : AppCompatActivity() {
 
         fileName = intent.getStringExtra("FILE_NAME") ?: ""
         StartButton.setOnClickListener {
-            val nextQuestion = session.nextQuestion()
-            session.evaluateAnswer(nextQuestion.question.answers[0])
             intent = Intent(this, QuestionPackTesting::class.java)
-           // val intent = Intent (this, QuestionPackTesting::class.java)
             intent.putExtra("FILE_NAME", fileName)
+            intent.putExtra("LEARN", TestingOptions.checkedChipId==chipLearn.id)
+            intent.putExtra("TEST", TestingOptions.checkedChipId==chipTest.id)
             startActivity(intent)
             //TODO start a testing activity
         }
