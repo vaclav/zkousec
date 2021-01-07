@@ -28,7 +28,7 @@ class QuestionPackSetup : AppCompatActivity() {
                 //TODO show the numbers of correctly/incorrectly answered questions as well as the remaining ones
                 CorrectlyAnsweredCount.text = session.correctlyAnsweredQuestions().size.toString();
                 IncorrectlyAnsweredCount.text = session.incorrectlyAnsweredQuestions().size.toString();
-                ToProcessCount.text = "Remaining questions: " + session.remainingQuestions().toString()
+                ToProcessCount.text = "Remaining questions: " + session.remainingQuestions().toString();
             }
         }
         TitleText.text = fileName.replace(".xml", "")
