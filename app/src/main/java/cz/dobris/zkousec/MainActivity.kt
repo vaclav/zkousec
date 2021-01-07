@@ -17,6 +17,11 @@ import kotlinx.android.synthetic.main.url_dialog.view.*
 
 
 class MainActivity : AppCompatActivity() {
+    /*
+    TODO:
+        - Make card that shows last test at the top functional
+        - Add settings button at the top right
+    */
 
     lateinit var arrayAdapter: ArrayAdapter<String>
 

@@ -17,6 +17,15 @@ import kotlin.concurrent.thread
 
 class QPTestingActivity : AppCompatActivity() {
 
+
+    /*todo:
+        - Simplify code.
+        - Find blocks of code that are usable in both modes (test, learn) and add them to ModeHelper.kt
+        - Make this activity just for "testing mode" purposes.
+        - Connect with QPTestResultsActivity.kt
+        - Remove showing correct answer after answering. We want to know correct answers only at the end of session
+    */
+
     lateinit var fileName : String
     lateinit var session: TestSession
     var continueFinal = false;
@@ -165,6 +174,7 @@ class QPTestingActivity : AppCompatActivity() {
         }
         throw java.lang.IllegalArgumentException("Question '${q.text}', position: ${q.position} has no ${if (correct) "right" else "wrong"} answers")
     }
+
     private fun showNextQuestion(){
         QuestionText.text = session.nextQuestion().question.text
         RemainingQuestionsText.text = "Remaining questions: " + session.remainingQuestions().toString()
