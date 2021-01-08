@@ -8,18 +8,27 @@ import cz.dobris.zkousec.fileStorage.Storage
 
 class DBHelper {
     companion object {
-        private fun buildDatabase(context : Context) : ZkousecDatabase =
-            Room.databaseBuilder(context, ZkousecDatabase::class.java, "database-name").build()
+        var db : ZkousecDatabase? = null
+
+        private fun buildDatabase(context : Context) : ZkousecDatabase {
+            if (db==null) {
+                Log.d("Zkousec", "Building database ${db!=null}")
+                db = Room.databaseBuilder(context, ZkousecDatabase::class.java, "database-name").build()
+            }
+            return db!!
+        }
 
         fun getTestSession(context: Context, fileName : String) : TestSession {
-            val sessionDatabase = DBHelper.buildDatabase(context).sessionDao()
+            val sessionDatabase = buildDatabase(context).sessionDao()
+            val all = sessionDatabase.getAll()
+            Log.d("Zkousec", "All sessions: " + all.size.toString() + " in "+ fileName)
             val loadedSessionEntity = sessionDatabase.loadAllById(fileName)
             val qp = Storage.loadQFile(fileName, context)
             return if (loadedSessionEntity != null) {
-                Log.d("Zkousec", "Successfully loaded a session!")
+                Log.d("Zkousec", "Successfully loaded a session!!!")
                 TestSession.fromSessionEntity(qp, loadedSessionEntity)
             } else {
-                Log.d("Zkousec", "Creating a new session!")
+                Log.d("Zkousec", "Creating a new session!!!")
                 val newSession = TestSession(qp)
                 sessionDatabase.insert(newSession.toSessionEntity())
                 newSession

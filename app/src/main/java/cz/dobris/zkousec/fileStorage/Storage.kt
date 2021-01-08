@@ -86,18 +86,15 @@ class Storage {
             val file = File(dir, name)
             if (!file.exists()) throw IllegalArgumentException("File $name does not exist.")
             val inputStream = file.inputStream() //.openFileInput(DIR_NAME + File.pathSeparator + name)
-            return loadQFile(
-                inputStream,
-                context
-            )
+            return loadQFile(name, inputStream, context)
         }
 
-        fun loadQFile(inputStream: FileInputStream, context: Context): QuestionPack {
+        fun loadQFile(fileName : String, inputStream: FileInputStream, context: Context): QuestionPack {
             val parser = Xml.newPullParser()
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
             parser.setInput(inputStream, null)
             parser.nextTag()
-            return QuestionPackParser().readQuestionPack(parser)
+            return QuestionPackParser().readQuestionPack(fileName, parser)
         }
 
     }

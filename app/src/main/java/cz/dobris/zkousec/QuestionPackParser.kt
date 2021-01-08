@@ -12,7 +12,7 @@ class QuestionPackParser {
     val nameSpace = null
 
     @Throws(XmlPullParserException::class, IOException::class)
-    fun readQuestionPack(parser: XmlPullParser): QuestionPack {
+    fun readQuestionPack(fileName : String, parser: XmlPullParser): QuestionPack {
         val questions = mutableListOf<Question>()
         var id = ""
         var description = ""
@@ -31,7 +31,7 @@ class QuestionPackParser {
                 else -> skip(parser)
             }
         }
-        val qp = QuestionPack(id, description, version, questions)
+        val qp = QuestionPack(fileName, id, description, version, questions)
         return qp
     }
 

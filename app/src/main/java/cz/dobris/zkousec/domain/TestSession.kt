@@ -16,7 +16,7 @@ class TestSession(
     private val answeredCorrectly: MutableList<QuestionStatus> = mutableListOf<QuestionStatus>(),
     private val answeredIncorrectly: MutableList<QuestionStatus> = mutableListOf<QuestionStatus>()
 ) {
-    val id = qp.id
+    val id = qp.fileName
 
     init { }
 

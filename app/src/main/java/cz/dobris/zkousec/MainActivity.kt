@@ -3,6 +3,7 @@ package cz.dobris.zkousec
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +11,12 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import cz.dobris.zkousec.db.DBHelper
 import cz.dobris.zkousec.fileStorage.Storage
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.url_dialog.*
 import kotlinx.android.synthetic.main.url_dialog.view.*
+import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     */
 
     lateinit var arrayAdapter: ArrayAdapter<String>
+    var lastQuestionPackId : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +41,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent (this, QPSetupActivity::class.java)
             val item = arrayAdapter.getItem(position)
             intent.putExtra("FILE_NAME", item)
+            lastQuestionPackId = item
             startActivity (intent)
         }
 
@@ -98,6 +103,22 @@ class MainActivity : AppCompatActivity() {
         for (fileName in listOfFiles) {
             arrayAdapter.add(fileName)
             Log.d("Zkousec", fileName + ":" + arrayAdapter.javaClass)
+        }
+
+        Log.d("Zkousec", "Last session: " + lastQuestionPackId)
+        if (lastQuestionPackId!=null) {
+            Card_qp_nameText.text = lastQuestionPackId
+            val handler =  Handler()
+            thread {
+                val session = DBHelper.getTestSession(this, lastQuestionPackId!!)
+                handler.post {
+                    Card_qp_RAText.text = session.remainingQuestions().toString()
+                    Card_qp_CAText.text = session.correctlyAnsweredQuestions().size.toString()
+                    Card_qp_ICAText.text = session.incorrectlyAnsweredQuestions().size.toString()
+                    //TODO store and recover the time
+                    //TODO store the lastQuestionPackId in the db
+                }
+            }
         }
         arrayAdapter.notifyDataSetChanged()
     }

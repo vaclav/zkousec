@@ -10,7 +10,7 @@ import java.lang.IllegalArgumentException
 
 class TestHelper {
     companion object {
-        val treeElementQP = QuestionPack("test", "Test", "1.0", listOf(
+        val treeElementQP = QuestionPack("test", "test", "Test", "1.0", listOf(
             Question(0, "what?", listOf(
                 Answer(true),
                 Answer(false),
