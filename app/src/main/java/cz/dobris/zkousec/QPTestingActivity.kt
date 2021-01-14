@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import com.google.android.material.chip.Chip
 import cz.dobris.zkousec.db.DBHelper
 import cz.dobris.zkousec.domain.TestSession
+import cz.dobris.zkousec.mode.ModeHelper
 import kotlinx.android.synthetic.main.activity_question_pack_testing.*
 import layout.Answer
 import layout.Question
@@ -51,9 +52,11 @@ class QPTestingActivity : AppCompatActivity() {
                 RemainingQuestionsText.text = "Remaining questions: " + session.remainingQuestions().toString()
                 ContinueButton.text = "Check"
                 setAnswerButtonsText()
+                val modeHelper = ModeHelper(session, AnswerChip1,AnswerChip2,AnswerChip3,AnswerChip4,QuestionText,RemainingQuestionsText)
             }
         }
         ContinueButton.setOnClickListener {
+            val modeHelper = ModeHelper(session, AnswerChip1,AnswerChip2,AnswerChip3,AnswerChip4,QuestionText,RemainingQuestionsText)
             when(true){
                 testChipFromIntent -> {
                     if (!continueFinal){
@@ -84,7 +87,8 @@ class QPTestingActivity : AppCompatActivity() {
                                 }
                             }
                         }
-                        setAnswerChipsColorToDefault()
+                    modeHelper.setAnswerChipsColorToDefault()
+                    //setAnswerChipsColorToDefault()
                     }
                 }
                 learnChipFromIntent -> {
@@ -146,9 +150,9 @@ class QPTestingActivity : AppCompatActivity() {
     private fun showCorrectAnswer(){
         val correctAnswer = findAnswer(session.nextQuestion().question, true).toString()
         AnswerChip1.isClickable = false
-        AnswerChip2.isClickable =false
+        AnswerChip2.isClickable = false
         AnswerChip3.isClickable = false
-        AnswerChip4.isClickable =false
+        AnswerChip4.isClickable = false
 
         if (correctAnswer == AnswerChip1.text) AnswerChip1.background.setTint(Color.GREEN)
             else AnswerChip1.background.setTint(Color.RED)
@@ -184,12 +188,14 @@ class QPTestingActivity : AppCompatActivity() {
         AnswerChip3.isChecked = false
         AnswerChip4.isChecked = false
     }
+
+    /*
     private fun setAnswerChipsColorToDefault(){
         AnswerChip1.background.setTintList(null)
         AnswerChip2.background.setTintList(null)
         AnswerChip3.background.setTintList(null)
         AnswerChip4.background.setTintList(null)
-    }
+    }*/
 
 
 }
