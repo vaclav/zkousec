@@ -18,10 +18,20 @@ class DBHelper {
             return db!!
         }
 
+        fun existsTestSession(context: Context, fileName : String) : Boolean = buildDatabase(context).sessionDao().loadAllById(fileName) != null
+
+        fun createTestSession(context: Context, fileName : String, session : TestSession) : TestSession {
+            val sessionDatabase = buildDatabase(context).sessionDao()
+            val loadedSessionEntity = sessionDatabase.loadAllById(fileName)
+            if (loadedSessionEntity != null) {
+                deleteTestSession(context, fileName)
+            }
+            sessionDatabase.insert(session.toSessionEntity())
+            return session
+        }
+
         fun getTestSession(context: Context, fileName : String) : TestSession {
             val sessionDatabase = buildDatabase(context).sessionDao()
-            val all = sessionDatabase.getAll()
-            Log.d("Zkousec", "All sessions: " + all.size.toString() + " in "+ fileName)
             val loadedSessionEntity = sessionDatabase.loadAllById(fileName)
             val qp = Storage.loadQFile(fileName, context)
             return if (loadedSessionEntity != null) {
