@@ -4,8 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/listOfButtons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/nav_menu" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView_recentlyUsedQP"
@@ -151,5 +161,8 @@
         app:layout_constraintTop_toBottomOf="@+id/QuestionPacksOnTheDeviceText" >
 
     </ListView>
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package cz.dobris.zkousec
+package cz.dobris.zkousec.activities
 
 import android.app.AlertDialog
 import android.content.DialogInterface
@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
+import cz.dobris.zkousec.R
 import cz.dobris.zkousec.db.DBHelper
 import cz.dobris.zkousec.domain.TestSession
 import cz.dobris.zkousec.fileStorage.Storage

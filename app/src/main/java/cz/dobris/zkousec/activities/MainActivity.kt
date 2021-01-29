@@ -1,4 +1,4 @@
-package cz.dobris.zkousec
+package cz.dobris.zkousec.activities
 
 import android.content.Intent
 import android.graphics.Color
@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import cz.dobris.zkousec.R
 import cz.dobris.zkousec.db.DBHelper
 import cz.dobris.zkousec.fileStorage.Storage
 import kotlinx.android.synthetic.main.activity_main.*
