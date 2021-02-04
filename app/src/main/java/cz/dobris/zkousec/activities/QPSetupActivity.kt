@@ -43,10 +43,12 @@ class QPSetupActivity : AppCompatActivity() {
 
         fileName = intent.getStringExtra("FILE_NAME") ?: ""
         StartButton.setOnClickListener {
-            intent = Intent(this, QPTestingActivity::class.java)
+
+            when(TestingOptions.checkedChipId){
+                chipLearn.id -> intent = Intent(this, QPTestingActivity::class.java)
+                chipTest.id -> intent = Intent(this, QPTestingActivity::class.java)
+            }
             intent.putExtra("FILE_NAME", fileName)
-            intent.putExtra("LEARN", TestingOptions.checkedChipId==chipLearn.id)
-            intent.putExtra("TEST", TestingOptions.checkedChipId==chipTest.id)
 
             if (session == null) {
                 val qp = Storage.loadQFile(fileName, this)
@@ -105,7 +107,7 @@ class QPSetupActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_main,menu)
+        menuInflater.inflate(R.menu.menu_qp_setup,menu)
         return true
     }
 

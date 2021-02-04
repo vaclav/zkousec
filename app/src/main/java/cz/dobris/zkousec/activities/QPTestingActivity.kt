@@ -28,7 +28,7 @@ class QPTestingActivity : AppCompatActivity() {
             session = DBHelper.getTestSession(this, fileName)
             modeHelper = ModeHelper(session)
             handler.post{
-                updateVisuals()
+                //updateVisuals()
             }
         }
 
