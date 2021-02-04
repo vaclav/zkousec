@@ -5,6 +5,9 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import cz.dobris.zkousec.R
 import cz.dobris.zkousec.db.DBHelper
@@ -62,25 +65,6 @@ class QPSetupActivity : AppCompatActivity() {
                 }
             }
         }
-        DeleteButton.setOnClickListener {
-            AlertDialog.Builder(this)
-                .setTitle("Delete file")
-                .setMessage("Do you really want to delete the questions titled: " + fileName + "?")
-                .setPositiveButton("Yes",
-                    DialogInterface.OnClickListener { dialog, which ->
-                        Storage.deleteQFile(fileName, it.context)
-                        thread {
-                            val db = DBHelper.deleteTestSession(this, fileName)
-                        }
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
-                    })
-
-                .setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show()
-        }
     }
 
     private fun updateVisuals(session: TestSession?, qp: QuestionPack) {
@@ -90,4 +74,41 @@ class QPSetupActivity : AppCompatActivity() {
         ToProcessCount.text = "Remaining questions: " + if (session==null) qp.questions.size.toString() else session.remainingQuestions().toString()
         StartButton.text = if (session==null) "Start" else "Continue"
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+                R.id.action_delete -> {
+                    AlertDialog.Builder(this)
+                        .setTitle("Delete file")
+                        .setMessage("Do you really want to delete the questions titled: " + fileName + "?")
+                        .setPositiveButton("Yes",
+                            DialogInterface.OnClickListener { dialog, which ->
+                                Storage.deleteQFile(fileName, this)
+                                thread {
+                                    val db = DBHelper.deleteTestSession(this, fileName)
+                                }
+                                val intent = Intent(this, MainActivity::class.java)
+                                startActivity(intent)
+                            })
+                        .setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show()
+                    return true
+                }
+            R.id.action_settings -> {
+                // TODO
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main,menu)
+        return true
+    }
+
+
+
 }
