@@ -40,6 +40,7 @@ class QPSetupActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_question_pack_setup2)
+        title = ""
 
         fileName = intent.getStringExtra("FILE_NAME") ?: ""
         StartButton.setOnClickListener {

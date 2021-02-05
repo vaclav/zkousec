@@ -41,17 +41,27 @@ class QPLearningActivity : AppCompatActivity() {
             session = DBHelper.getTestSession(this,fileName)
             handler.post{
                 updateVisuals()
+                updateButtons(true)
             }
         }
 
         learnShowAnswerButton.setOnClickListener {
             learnAnswerText.visibility = View.VISIBLE
+            updateButtons(false)
         }
         learnIKbutton.setOnClickListener {
             thread {
                 session.evaluateAnswer(session.nextQuestion().question.answers[1])
             }
             updateVisuals()
+            updateButtons(true)
+        }
+        learnIDKbutton.setOnClickListener {
+            thread {
+                session.evaluateAnswer(session.nextQuestion().question.answers[0])
+            }
+            updateVisuals()
+            updateButtons(true)
         }
 
 
@@ -69,6 +79,17 @@ class QPLearningActivity : AppCompatActivity() {
 
         }
         throw java.lang.IllegalArgumentException("Question '${q.text}', position: ${q.position} has no ${if (correct) "right" else "wrong"} answers")
+    }
+    private fun updateButtons(showButtonVisibility: Boolean){
+        if (showButtonVisibility){
+            learnIDKbutton.visibility = View.GONE
+            learnIKbutton.visibility = View.GONE
+            learnShowAnswerButton.visibility = View.VISIBLE
+        }else{
+            learnIDKbutton.visibility = View.VISIBLE
+            learnIKbutton.visibility = View.VISIBLE
+            learnShowAnswerButton.visibility = View.GONE
+        }
     }
 
 }

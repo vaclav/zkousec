@@ -2,6 +2,7 @@ package cz.dobris.zkousec.activities
 
 import android.content.Intent
 import android.graphics.Color
+import android.opengl.Visibility
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -11,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import cz.dobris.zkousec.R
 import cz.dobris.zkousec.db.DBHelper
 import cz.dobris.zkousec.fileStorage.Storage
@@ -33,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        title = "Home"
         arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1)
         listOfButtons.adapter = arrayAdapter
         refreshListOfQuestionPacks(arrayAdapter)
@@ -82,7 +84,27 @@ class MainActivity : AppCompatActivity() {
                 downloadDialogShown.dismiss()
             }
         }
+        bottomNavigationView.setSelectedItemId(R.id.ic_home)
+        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.ic_home -> {
+                    true
+                }
+                R.id.ic_download -> {
+                    startActivity(Intent(this, QPListActivity::class.java))
+                    overridePendingTransition(0,0)
+                    true
+                }
+            }
+            false
+        }
+        cardView_recentlyUsedQP.setOnClickListener {
+            val intent = Intent (this, QPSetupActivity::class.java)
+            intent.putExtra("FILE_NAME", lastQuestionPackId)
+            startActivity(intent)
+        }
     }
+
 
     override fun onStart() {
         super.onStart()
@@ -116,10 +138,15 @@ class MainActivity : AppCompatActivity() {
                     Card_qp_RAText.text = session.remainingQuestions().toString()
                     Card_qp_CAText.text = session.correctlyAnsweredQuestions().size.toString()
                     Card_qp_ICAText.text = session.incorrectlyAnsweredQuestions().size.toString()
+                    recentlyUsedQPHeaderTextView.visibility = View.VISIBLE
+                    cardView_recentlyUsedQP.visibility = View.VISIBLE
                     //TODO store and recover the time
                     //TODO store the lastQuestionPackId in the db
                 }
             }
+        }else{
+            recentlyUsedQPHeaderTextView.visibility = View.GONE
+            cardView_recentlyUsedQP.visibility = View.GONE
         }
         arrayAdapter.notifyDataSetChanged()
     }
