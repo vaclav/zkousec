@@ -45,7 +45,7 @@ class QPSetupActivity : AppCompatActivity() {
         StartButton.setOnClickListener {
 
             when(TestingOptions.checkedChipId){
-                chipLearn.id -> intent = Intent(this, QPTestingActivity::class.java)
+                chipLearn.id -> intent = Intent(this, QPLearningActivity::class.java)
                 chipTest.id -> intent = Intent(this, QPTestingActivity::class.java)
             }
             intent.putExtra("FILE_NAME", fileName)

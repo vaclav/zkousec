@@ -7,6 +7,7 @@ import android.os.PersistableBundle
 import android.view.View
 import androidx.core.view.isVisible
 import com.google.android.material.chip.Chip
+import cz.dobris.zkousec.R
 import cz.dobris.zkousec.db.DBHelper
 import cz.dobris.zkousec.domain.TestSession
 import kotlinx.android.synthetic.main.activity_question_pack_learning.*
@@ -32,6 +33,7 @@ class QPLearningActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_question_pack_learning)
 
         fileName = intent.getStringExtra("FILE_NAME") ?: ""
         val handler = Handler()
@@ -44,6 +46,12 @@ class QPLearningActivity : AppCompatActivity() {
 
         learnShowAnswerButton.setOnClickListener {
             learnAnswerText.visibility = View.VISIBLE
+        }
+        learnIKbutton.setOnClickListener {
+            thread {
+                session.evaluateAnswer(session.nextQuestion().question.answers[1])
+            }
+            updateVisuals()
         }
 
 

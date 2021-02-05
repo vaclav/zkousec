@@ -28,7 +28,7 @@ class QPTestingActivity : AppCompatActivity() {
             session = DBHelper.getTestSession(this, fileName)
             modeHelper = ModeHelper(session)
             handler.post{
-                //updateVisuals()
+                updateVisuals()
             }
         }
 
@@ -38,8 +38,8 @@ class QPTestingActivity : AppCompatActivity() {
 
         ContinueButton.setOnClickListener {
             thread {
-                session.evaluateAnswer(session.nextQuestion().question.answers[0])
-                DBHelper.saveTestSession(this, session)
+                session.evaluateAnswer(session.nextQuestion().question.answers[getNumberOfCheckedChipById()])
+                //DBHelper.saveTestSession(this, session)
                 handler.post{
                     updateVisuals()
                 }
@@ -54,6 +54,7 @@ class QPTestingActivity : AppCompatActivity() {
         QuestionText.text = session.nextQuestion().question.text
         RemainingQuestionsText.text = "Remaining questions: " + session.remainingQuestions().toString()
     }
+
     private fun getNumberOfCheckedChipById():Int{
         when (AnswerChips.checkedChipId) {
             AnswerChip1.id -> return 0
@@ -63,8 +64,6 @@ class QPTestingActivity : AppCompatActivity() {
             else -> throw IllegalArgumentException("Unknown chip ID")
         }
     }
-
-
 
 
 
