@@ -51,6 +51,7 @@ class TestSession(
         val toProcessString = toProcess.map { encodeQuestionStatus(it) }.joinToString()
         val answeredCorrectlyString = answeredCorrectly.map { encodeQuestionStatus(it) }.joinToString()
         val answeredIncorrectlyString = answeredIncorrectly.map { encodeQuestionStatus(it) }.joinToString()
+        Log.d("Zkousec", "Saving " + toProcessString + ":" + answeredCorrectlyString + ":" + answeredIncorrectlyString)
         return SessionEntity(id, answerHandler.javaClass.name, toProcessString, answeredCorrectlyString, answeredIncorrectlyString)
     }
 
@@ -159,7 +160,7 @@ class TestSession(
             } else {
                 q.answeredIncorrectly += 1
                 if (q.answeredIncorrectly < numberOfRetries) {
-                    val nextInt = random.nextInt(session.toProcess.size)
+                    val nextInt = if (session.toProcess.size > 0) random.nextInt(session.toProcess.size) else 0
                     session.toProcess.add(nextInt, q)
                 } else {
                     session.answeredIncorrectly.add(q)

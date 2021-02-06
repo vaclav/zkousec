@@ -1,5 +1,6 @@
 package cz.dobris.zkousec.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -51,26 +52,32 @@ class QPLearningActivity : AppCompatActivity() {
         }
         learnIKbutton.setOnClickListener {
             thread {
-                session.evaluateAnswer(session.nextQuestion().question.answers[1])
+                session.evaluateAnswer(findAnswer(session.nextQuestion().question, true))
+                DBHelper.saveTestSession(this, session)
             }
             updateVisuals()
             updateButtons(true)
         }
         learnIDKbutton.setOnClickListener {
             thread {
-                session.evaluateAnswer(session.nextQuestion().question.answers[0])
+                session.evaluateAnswer(findAnswer(session.nextQuestion().question, false))
+                DBHelper.saveTestSession(this, session)
             }
             updateVisuals()
             updateButtons(true)
         }
-
-
     }
 
     private fun updateVisuals(){
-        learnQuestionText.text = session.nextQuestion().question.text
-        learnAnswerText.text = findAnswer(session.nextQuestion().question,true).toString()
-        learnAnswerText.visibility = View.GONE
+        if (session.remainingQuestions()==0) {
+            val intent = Intent (this, QPSetupActivity::class.java)
+            intent.putExtra("FILE_NAME", fileName)
+            startActivity (intent)
+        } else {
+            learnQuestionText.text = session.nextQuestion().question.text
+            learnAnswerText.text = findAnswer(session.nextQuestion().question,true).toString()
+            learnAnswerText.visibility = View.GONE
+        }
     }
     private fun findAnswer(q: Question, correct: Boolean) : Answer {
         for (answer in q.answers) {
@@ -85,7 +92,7 @@ class QPLearningActivity : AppCompatActivity() {
             learnIDKbutton.visibility = View.GONE
             learnIKbutton.visibility = View.GONE
             learnShowAnswerButton.visibility = View.VISIBLE
-        }else{
+        } else {
             learnIDKbutton.visibility = View.VISIBLE
             learnIKbutton.visibility = View.VISIBLE
             learnShowAnswerButton.visibility = View.GONE

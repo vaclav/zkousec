@@ -3,6 +3,7 @@ package cz.dobris.zkousec.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import androidx.core.view.isVisible
 import cz.dobris.zkousec.R
 import cz.dobris.zkousec.db.DBHelper
@@ -21,7 +22,6 @@ class QPTestingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_question_pack_testing)
-
         fileName = intent.getStringExtra("FILE_NAME") ?: ""
         val handler = Handler()
         thread {
@@ -39,7 +39,7 @@ class QPTestingActivity : AppCompatActivity() {
         ContinueButton.setOnClickListener {
             thread {
                 session.evaluateAnswer(session.nextQuestion().question.answers[getNumberOfCheckedChipById()])
-                //DBHelper.saveTestSession(this, session)
+                DBHelper.saveTestSession(this, session)
                 handler.post{
                     updateVisuals()
                 }

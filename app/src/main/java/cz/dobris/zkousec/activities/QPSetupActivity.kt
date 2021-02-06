@@ -51,11 +51,17 @@ class QPSetupActivity : AppCompatActivity() {
             }
             intent.putExtra("FILE_NAME", fileName)
 
-            if (session == null) {
-                val qp = Storage.loadQFile(fileName, this)
-                session = DBHelper.createTestSession(this, fileName, TestSession(qp))
+            val handler = Handler()
+            thread {
+                if (session == null) {
+                    val qp = Storage.loadQFile(fileName, this)
+                    session = DBHelper.createTestSession(this, fileName, TestSession(qp, answerHandler =
+                    if (TestingOptions.checkedChipId==chipLearn.id) TestSession.RetryIncorrectAnswerHandler()  else TestSession.SimpleAnswerHandler()))
+                }
+                handler.post {
+                    startActivity(intent)
+                }
             }
-            startActivity(intent)
         }
         ResetButton.setOnClickListener {
             val handler = Handler()
