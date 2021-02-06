@@ -1,6 +1,8 @@
 package cz.dobris.zkousec.activities
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.opengl.Visibility
 import android.os.Bundle
@@ -25,7 +27,6 @@ import kotlin.concurrent.thread
 class MainActivity : AppCompatActivity() {
     /*
     TODO:
-        - Make card that shows last test at the top functional
         - Add settings button at the top right
     */
 
@@ -35,6 +36,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        loadLastQPid()
         title = "Home"
         arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1)
         listOfButtons.adapter = arrayAdapter
@@ -45,6 +48,7 @@ class MainActivity : AppCompatActivity() {
             val item = arrayAdapter.getItem(position)
             intent.putExtra("FILE_NAME", item)
             lastQuestionPackId = item
+            saveLastQPid()
             startActivity (intent)
         }
 
@@ -103,6 +107,19 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("FILE_NAME", lastQuestionPackId)
             startActivity(intent)
         }
+    }
+
+    private fun saveLastQPid() {
+        val sharedPreferences = getSharedPreferences("lastQPcardPref", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.apply(){
+            putString("lastQPcardString", lastQuestionPackId)
+        }.apply()
+    }
+    private fun loadLastQPid(){
+        val sharedPreferences = getSharedPreferences("lastQPcardPref", Context.MODE_PRIVATE)
+        lastQuestionPackId = sharedPreferences.getString("lastQPcardString",null)
+        if (Storage.listQFiles(this).size == 0) lastQuestionPackId = null
     }
 
 

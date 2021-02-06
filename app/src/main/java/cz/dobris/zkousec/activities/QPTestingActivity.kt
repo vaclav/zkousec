@@ -1,5 +1,6 @@
 package cz.dobris.zkousec.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -49,10 +50,18 @@ class QPTestingActivity : AppCompatActivity() {
 
     }
     private fun updateVisuals(){
-        ContinueButton.isVisible = false
-        modeHelper.setAnswerButtonsText(AnswerChip1,AnswerChip2,AnswerChip3,AnswerChip4)
-        QuestionText.text = session.nextQuestion().question.text
-        RemainingQuestionsText.text = "Remaining questions: " + session.remainingQuestions().toString()
+        if (session.remainingQuestions()!=0){
+            ContinueButton.isVisible = false
+            modeHelper.setAnswerButtonsText(AnswerChip1,AnswerChip2,AnswerChip3,AnswerChip4)
+            QuestionText.text = session.nextQuestion().question.text
+            RemainingQuestionsText.text = "Remaining questions: " + session.remainingQuestions().toString()
+        }else{
+            intent = Intent(this, QPResultsActivity::class.java)
+            intent.putExtra("TO_SHOW", "all")
+            intent.putExtra("FILE_NAME", fileName)
+            startActivity(intent)
+        }
+
     }
 
     private fun getNumberOfCheckedChipById():Int{

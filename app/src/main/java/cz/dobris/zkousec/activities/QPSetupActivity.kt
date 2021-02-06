@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import cz.dobris.zkousec.R
@@ -33,6 +32,9 @@ class QPSetupActivity : AppCompatActivity() {
             handler.post {
                 updateVisuals(session, qp)
             }
+
+
+
         }
         TitleText.text = fileName.replace(".xml", "")
     }
@@ -41,39 +43,61 @@ class QPSetupActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_question_pack_setup2)
         title = ""
-
         fileName = intent.getStringExtra("FILE_NAME") ?: ""
-        StartButton.setOnClickListener {
 
+
+        StartButton.setOnClickListener {
+            val handler = Handler()
             when(TestingOptions.checkedChipId){
                 chipLearn.id -> intent = Intent(this, QPLearningActivity::class.java)
                 chipTest.id -> intent = Intent(this, QPTestingActivity::class.java)
             }
             intent.putExtra("FILE_NAME", fileName)
 
-            val handler = Handler()
             thread {
                 if (session == null) {
                     val qp = Storage.loadQFile(fileName, this)
                     session = DBHelper.createTestSession(this, fileName, TestSession(qp, answerHandler =
                     if (TestingOptions.checkedChipId==chipLearn.id) TestSession.RetryIncorrectAnswerHandler()  else TestSession.SimpleAnswerHandler()))
-                }
-                handler.post {
-                    startActivity(intent)
+                    handler.post {
+                        startActivity(intent)
+                    }
+                }else{
+                    handler.post{
+                        AlertDialog.Builder(this)
+                            .setTitle("Do you want to continue?")
+                            .setPositiveButton("Continue",
+                                DialogInterface.OnClickListener { dialog, which ->
+                                    startActivity(intent)
+                                })
+                            .setNegativeButton("Reset", DialogInterface.OnClickListener { dialog, which ->
+                                thread {
+                                    DBHelper.deleteTestSession(this, fileName)
+                                    session = null
+                                    val qp = Storage.loadQFile(fileName, this)
+                                    handler.post {
+                                        updateVisuals(session, qp);
+                                    }
+                                }
+                            })
+                            .show()
+                    }
                 }
             }
         }
-        ResetButton.setOnClickListener {
-            val handler = Handler()
-            thread {
-                DBHelper.deleteTestSession(this, fileName)
-                val qp = Storage.loadQFile(fileName, this)
-                val session = null
-                handler.post {
-                    updateVisuals(session, qp);
-                }
-            }
+        setupCorectlyAnsweredCard.setOnClickListener {
+            intent = Intent(this, QPResultsActivity::class.java)
+            intent.putExtra("TO_SHOW", "correct")
+            intent.putExtra("FILE_NAME", fileName)
+            startActivity(intent)
         }
+        setupIncorectlyAnsweredCard.setOnClickListener {
+            intent = Intent(this, QPResultsActivity::class.java)
+            intent.putExtra("TO_SHOW", "incorrect")
+            intent.putExtra("FILE_NAME", fileName)
+            startActivity(intent)
+        }
+
     }
 
     private fun updateVisuals(session: TestSession?, qp: QuestionPack) {
@@ -82,6 +106,23 @@ class QPSetupActivity : AppCompatActivity() {
         IncorrectlyAnsweredCount.text = if (session==null) "0" else session.incorrectlyAnsweredQuestions().size.toString();
         ToProcessCount.text = "Remaining questions: " + if (session==null) qp.questions.size.toString() else session.remainingQuestions().toString()
         StartButton.text = if (session==null) "Start" else "Continue"
+
+        if (session != null){
+            if (session.answerHandler == TestSession.RetryIncorrectAnswerHandler()){
+                chipLearn.isChecked = true
+                chipTest.isChecked = false
+            }else{
+                chipLearn.isChecked = false
+                chipTest.isChecked = true
+            }
+            chipLearn.isEnabled = false
+            chipTest.isEnabled = false
+        }else{
+            chipLearn.isEnabled = true
+            chipTest.isEnabled = true
+        }
+
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

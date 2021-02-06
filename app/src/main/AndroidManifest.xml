@@ -14,7 +14,8 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".activities.QPListActivity"></activity>
         <activity android:name=".activities.QPLearningActivity" />
-        <activity android:name=".activities.QPTestResultsActivity" />
+        <activity
+            android:name=".activities.QPResultsActivity" />
         <activity android:name=".activities.QPTestingActivity" />
         <activity
             android:name=".activities.QPSetupActivity"
