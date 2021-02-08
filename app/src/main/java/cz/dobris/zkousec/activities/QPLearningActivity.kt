@@ -1,11 +1,14 @@
 package cz.dobris.zkousec.activities
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.PersistableBundle
 import android.view.View
+import androidx.appcompat.app.ActionBar
 import androidx.core.view.isVisible
 import com.google.android.material.chip.Chip
 import cz.dobris.zkousec.R
@@ -37,6 +40,7 @@ class QPLearningActivity : AppCompatActivity() {
         setContentView(R.layout.activity_question_pack_learning)
 
         fileName = intent.getStringExtra("FILE_NAME") ?: ""
+
         val handler = Handler()
         thread {
             session = DBHelper.getTestSession(this,fileName)
@@ -51,17 +55,21 @@ class QPLearningActivity : AppCompatActivity() {
             updateButtons(false)
         }
         learnIKbutton.setOnClickListener {
-            thread {
-                session.evaluateAnswer(findAnswer(session.nextQuestion().question, true))
-                DBHelper.saveTestSession(this, session)
+            if(session.remainingQuestions() != 0){
+                thread {
+                    session.evaluateAnswer(findAnswer(session.nextQuestion().question, true))
+                    DBHelper.saveTestSession(this, session)
+                }
             }
             updateVisuals()
             updateButtons(true)
         }
         learnIDKbutton.setOnClickListener {
             thread {
-                session.evaluateAnswer(findAnswer(session.nextQuestion().question, false))
-                DBHelper.saveTestSession(this, session)
+                if (session.remainingQuestions() != 0){
+                    session.evaluateAnswer(findAnswer(session.nextQuestion().question, false))
+                    DBHelper.saveTestSession(this, session)
+                }
             }
             updateVisuals()
             updateButtons(true)

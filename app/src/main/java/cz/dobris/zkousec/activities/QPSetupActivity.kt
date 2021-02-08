@@ -1,17 +1,22 @@
 package cz.dobris.zkousec.activities
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import cz.dobris.zkousec.R
 import cz.dobris.zkousec.db.DBHelper
 import cz.dobris.zkousec.domain.TestSession
 import cz.dobris.zkousec.fileStorage.Storage
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_question_pack_setup2.*
 import layout.QuestionPack
 import kotlin.concurrent.thread
@@ -45,7 +50,19 @@ class QPSetupActivity : AppCompatActivity() {
         title = ""
         fileName = intent.getStringExtra("FILE_NAME") ?: ""
 
+        TestingOptions.setOnCheckedChangeListener { chipGroup, i ->
+            when(TestingOptions.checkedChipId){
+                chipTest.id -> StartButton.visibility = View.VISIBLE
+                chipLearn.id -> StartButton.visibility = View.VISIBLE
+                else -> StartButton.visibility = View.INVISIBLE
+            }
+        }
 
+        when(TestingOptions.checkedChipId){
+            chipTest.id -> StartButton.visibility = View.VISIBLE
+            chipLearn.id -> StartButton.visibility = View.VISIBLE
+            else -> StartButton.visibility = View.INVISIBLE
+        }
         StartButton.setOnClickListener {
             val handler = Handler()
             when(TestingOptions.checkedChipId){
@@ -108,12 +125,15 @@ class QPSetupActivity : AppCompatActivity() {
         StartButton.text = if (session==null) "Start" else "Continue"
 
         if (session != null){
-            if (session.answerHandler == TestSession.RetryIncorrectAnswerHandler()){
-                chipLearn.isChecked = true
-                chipTest.isChecked = false
-            }else{
-                chipLearn.isChecked = false
-                chipTest.isChecked = true
+            when(session.answerHandler){
+                TestSession.RetryIncorrectAnswerHandler() -> {
+                    chipLearn.isChecked = true
+                    chipTest.isChecked = false
+                }
+                TestSession.SimpleAnswerHandler() -> {
+                    chipLearn.isChecked = false
+                    chipTest.isChecked = true
+                }
             }
             chipLearn.isEnabled = false
             chipTest.isEnabled = false
@@ -137,6 +157,7 @@ class QPSetupActivity : AppCompatActivity() {
                                 thread {
                                     val db = DBHelper.deleteTestSession(this, fileName)
                                 }
+                                Toast.makeText(this, fileName + " has been deleted!",Toast.LENGTH_LONG).show()
                                 val intent = Intent(this, MainActivity::class.java)
                                 startActivity(intent)
                             })
@@ -158,6 +179,7 @@ class QPSetupActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_qp_setup,menu)
         return true
     }
+
 
 
 
