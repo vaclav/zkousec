@@ -1,6 +1,7 @@
 package cz.dobris.zkousec.activities
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
@@ -9,6 +10,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -31,7 +34,7 @@ class MainActivity : AppCompatActivity() {
     */
 
     lateinit var arrayAdapter: ArrayAdapter<String>
-    var lastQuestionPackId : String? = null
+    var lastQuestionPackId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,21 +47,21 @@ class MainActivity : AppCompatActivity() {
         refreshListOfQuestionPacks(arrayAdapter)
 
         listOfButtons.setOnItemClickListener { adapterView, view, position, id ->
-            val intent = Intent (this, QPSetupActivity::class.java)
+            val intent = Intent(this, QPSetupActivity::class.java)
             val item = arrayAdapter.getItem(position)
             intent.putExtra("FILE_NAME", item)
             lastQuestionPackId = item
             saveLastQPid()
-            startActivity (intent)
+            startActivity(intent)
         }
 
         //This part of code shows dialog to user with text field for downloading Question Pack from URL.
-        addQuestionPackButton.setOnClickListener{v ->
+        addQuestionPackButton.setOnClickListener { v ->
             val mDialogView = LayoutInflater.from(this).inflate(R.layout.url_dialog, null)
             val downloadDialog = AlertDialog.Builder(this)
                 .setView(mDialogView)
                 .setTitle("Download Question Pack")
-                val downloadDialogShown = downloadDialog.show()
+            val downloadDialogShown = downloadDialog.show()
 
             downloadDialogShown.getUrlButton.setOnClickListener {
                 val value = mDialogView.getUrlEditText.text.toString()
@@ -71,16 +74,16 @@ class MainActivity : AppCompatActivity() {
                         try {
                             Storage.saveQFileFromUrl(urlByUser, testName, it.context)
                             v.post { refreshListOfQuestionPacks(arrayAdapter) }
-                        }catch (e : Exception) {
+                        } catch (e: Exception) {
                             e.printStackTrace()
-                            v.post { Toast.makeText(this, "Cannot download the file. " + e.message ,Toast.LENGTH_SHORT).show() }
+                            v.post { Toast.makeText(this, "Cannot download the file. " + e.message, Toast.LENGTH_SHORT).show() }
                         }
                     }).start()
                 } catch (e: IllegalArgumentException) {
                     AlertDialog.Builder(this)
                         .setTitle("Error")
                         .setMessage(e.message)
-                        .setPositiveButton("OK", {dialog, which -> dialog.dismiss()})
+                        .setPositiveButton("OK", { dialog, which -> dialog.dismiss() })
                         .show()
                 }
             }
@@ -96,14 +99,14 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.ic_download -> {
                     startActivity(Intent(this, QPListActivity::class.java))
-                    overridePendingTransition(0,0)
+                    overridePendingTransition(0, 0)
                     true
                 }
             }
             false
         }
         cardView_recentlyUsedQP.setOnClickListener {
-            val intent = Intent (this, QPSetupActivity::class.java)
+            val intent = Intent(this, QPSetupActivity::class.java)
             intent.putExtra("FILE_NAME", lastQuestionPackId)
             startActivity(intent)
         }
@@ -112,13 +115,14 @@ class MainActivity : AppCompatActivity() {
     private fun saveLastQPid() {
         val sharedPreferences = getSharedPreferences("lastQPcardPref", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        editor.apply(){
+        editor.apply() {
             putString("lastQPcardString", lastQuestionPackId)
         }.apply()
     }
-    private fun loadLastQPid(){
+
+    private fun loadLastQPid() {
         val sharedPreferences = getSharedPreferences("lastQPcardPref", Context.MODE_PRIVATE)
-        lastQuestionPackId = sharedPreferences.getString("lastQPcardString",null)
+        lastQuestionPackId = sharedPreferences.getString("lastQPcardString", null)
         if (Storage.listQFiles(this).size == 0) lastQuestionPackId = null
     }
 
@@ -131,7 +135,7 @@ class MainActivity : AppCompatActivity() {
     fun refreshListOfQuestionPacks(arrayAdapter: ArrayAdapter<String>) {
         val listOfFiles = Storage.listQFiles(this)
         arrayAdapter.clear()
-        if(listOfFiles.size==0) {
+        if (listOfFiles.size == 0) {
             QuestionPacksOnTheDeviceText.text = "No question packs installed yet!"
             QuestionPacksOnTheDeviceText.setTextColor(Color.RED)
             QuestionPacksOnTheDeviceText.visibility = View.VISIBLE
@@ -146,9 +150,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         Log.d("Zkousec", "Last session: " + lastQuestionPackId)
-        if (lastQuestionPackId!=null) {
+        if (lastQuestionPackId != null) {
             Card_qp_nameText.text = lastQuestionPackId
-            val handler =  Handler()
+            val handler = Handler()
             thread {
                 val session = DBHelper.getTestSession(this, lastQuestionPackId!!)
                 handler.post {
@@ -161,11 +165,27 @@ class MainActivity : AppCompatActivity() {
                     //TODO store the lastQuestionPackId in the db
                 }
             }
-        }else{
+        } else {
             recentlyUsedQPHeaderTextView.visibility = View.GONE
             cardView_recentlyUsedQP.visibility = View.GONE
         }
         arrayAdapter.notifyDataSetChanged()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_activity_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_main_settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
+                return true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+
+    }
 }

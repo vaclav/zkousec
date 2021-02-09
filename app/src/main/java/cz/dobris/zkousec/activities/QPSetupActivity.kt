@@ -153,13 +153,12 @@ class QPSetupActivity : AppCompatActivity() {
                         .setMessage("Do you really want to delete the questions titled: " + fileName + "?")
                         .setPositiveButton("Yes",
                             DialogInterface.OnClickListener { dialog, which ->
+                                Toast.makeText(this, fileName + " has been deleted!",Toast.LENGTH_LONG).show()
                                 Storage.deleteQFile(fileName, this)
                                 thread {
                                     val db = DBHelper.deleteTestSession(this, fileName)
                                 }
-                                Toast.makeText(this, fileName + " has been deleted!",Toast.LENGTH_LONG).show()
-                                val intent = Intent(this, MainActivity::class.java)
-                                startActivity(intent)
+                                startActivity(Intent(this, MainActivity::class.java))
                             })
                         .setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
                         })

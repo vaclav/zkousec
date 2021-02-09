@@ -1,0 +1,31 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <PreferenceCategory app:title="General">
+    </PreferenceCategory>
+
+
+    <PreferenceCategory app:title="Test mode settings">
+    </PreferenceCategory>
+
+
+    <PreferenceCategory app:title="Learn mode settings">
+    </PreferenceCategory>
+
+
+    <PreferenceCategory app:title="Advanced">
+        <SwitchPreferenceCompat
+            app:key="advancedSwitch"
+            app:title="Use advanced settings" />
+
+        <ListPreference
+            app:dependency="advancedSwitch"
+            app:defaultValue="Never"
+            app:entries="@array/reply_entries"
+            app:entryValues="@array/reply_values"
+            app:key="reply"
+            app:title="Turn on DND"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

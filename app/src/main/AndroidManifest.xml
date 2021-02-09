@@ -12,10 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.QPListActivity"></activity>
-        <activity android:name=".activities.QPLearningActivity" />
         <activity
-            android:name=".activities.QPResultsActivity" />
+            android:name=".activities.QPSetupSettingsActivity"
+            android:label="@string/title_activity_q_p_setup_settings" />
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/title_activity_settings" />
+        <activity android:name=".activities.QPListActivity" />
+        <activity android:name=".activities.QPLearningActivity" />
+        <activity android:name=".activities.QPResultsActivity" />
         <activity android:name=".activities.QPTestingActivity" />
         <activity
             android:name=".activities.QPSetupActivity"
