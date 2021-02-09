@@ -23,13 +23,7 @@ import kotlin.concurrent.thread
 class QPLearningActivity : AppCompatActivity() {
 
     /* TODO:
-        - Use code from ModeHelper.kt
-            and QPTestingActivity.kt to create
-            activity just for "learning mode" purposes.
-        - Add button that show directly right answer
-            without needing an answer from user.
         - Handle image answers, questions
-        - Right answer show by changing a tint of the img/btn to red or green
     */
     lateinit var fileName : String
     lateinit var session: TestSession
@@ -91,7 +85,6 @@ class QPLearningActivity : AppCompatActivity() {
         for (answer in q.answers) {
             if (answer.correct == correct)
                 return answer
-
         }
         throw java.lang.IllegalArgumentException("Question '${q.text}', position: ${q.position} has no ${if (correct) "right" else "wrong"} answers")
     }

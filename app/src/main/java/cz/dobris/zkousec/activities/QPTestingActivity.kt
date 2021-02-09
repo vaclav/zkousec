@@ -1,10 +1,12 @@
 package cz.dobris.zkousec.activities
 
 import android.content.Intent
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.View
 import androidx.core.view.isVisible
 import cz.dobris.zkousec.R
 import cz.dobris.zkousec.db.DBHelper
@@ -32,9 +34,8 @@ class QPTestingActivity : AppCompatActivity() {
                 updateVisuals()
             }
         }
-
         AnswerChips.setOnCheckedChangeListener{ AnswerChips, i ->
-                ContinueButton.isVisible = true
+            ContinueButton.isVisible = AnswerChip1.isChecked == true || AnswerChip2.isChecked == true || AnswerChip3.isChecked == true|| AnswerChip1.isChecked == true
         }
 
         ContinueButton.setOnClickListener {
@@ -55,6 +56,10 @@ class QPTestingActivity : AppCompatActivity() {
             modeHelper.setAnswerButtonsText(AnswerChip1,AnswerChip2,AnswerChip3,AnswerChip4)
             QuestionText.text = session.nextQuestion().question.text
             RemainingQuestionsText.text = "Remaining questions: " + session.remainingQuestions().toString()
+            AnswerChip1.isChecked = false
+            AnswerChip2.isChecked = false
+            AnswerChip3.isChecked = false
+            AnswerChip4.isChecked = false
         }else{
             intent = Intent(this, QPResultsActivity::class.java)
             intent.putExtra("TO_SHOW", "all")
