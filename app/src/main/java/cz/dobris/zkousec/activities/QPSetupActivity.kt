@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -75,7 +76,7 @@ class QPSetupActivity : AppCompatActivity() {
                 if (session == null) {
                     val qp = Storage.loadQFile(fileName, this)
                     session = DBHelper.createTestSession(this, fileName, TestSession(qp, answerHandler =
-                    if (TestingOptions.checkedChipId==chipLearn.id) TestSession.RetryIncorrectAnswerHandler()  else TestSession.SimpleAnswerHandler()))
+                    if (TestingOptions.checkedChipId==chipLearn.id) TestSession.RetryIncorrectAnswerHandler() else TestSession.SimpleAnswerHandler()))
                     handler.post {
                         startActivity(intent)
                     }
@@ -126,11 +127,11 @@ class QPSetupActivity : AppCompatActivity() {
 
         if (session != null){
             when(session.answerHandler){
-                TestSession.RetryIncorrectAnswerHandler() -> {
+                is TestSession.RetryIncorrectAnswerHandler -> {
                     chipLearn.isChecked = true
                     chipTest.isChecked = false
                 }
-                TestSession.SimpleAnswerHandler() -> {
+                is TestSession.SimpleAnswerHandler -> {
                     chipLearn.isChecked = false
                     chipTest.isChecked = true
                 }

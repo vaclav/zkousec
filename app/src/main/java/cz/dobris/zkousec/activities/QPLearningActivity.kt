@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.PersistableBundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.ActionBar
 import androidx.core.view.isVisible
@@ -50,8 +51,8 @@ class QPLearningActivity : AppCompatActivity() {
         }
         learnIKbutton.setOnClickListener {
             if(session.remainingQuestions() != 0){
+                session.evaluateAnswer(findAnswer(session.nextQuestion().question, true))
                 thread {
-                    session.evaluateAnswer(findAnswer(session.nextQuestion().question, true))
                     DBHelper.saveTestSession(this, session)
                 }
             }
@@ -59,9 +60,9 @@ class QPLearningActivity : AppCompatActivity() {
             updateButtons(true)
         }
         learnIDKbutton.setOnClickListener {
-            thread {
-                if (session.remainingQuestions() != 0){
-                    session.evaluateAnswer(findAnswer(session.nextQuestion().question, false))
+            if (session.remainingQuestions() != 0){
+                session.evaluateAnswer(findAnswer(session.nextQuestion().question, false))
+                thread {
                     DBHelper.saveTestSession(this, session)
                 }
             }
@@ -71,11 +72,13 @@ class QPLearningActivity : AppCompatActivity() {
     }
 
     private fun updateVisuals(){
+        Log.d("Zkousec", "Remaining questions when updating visuals: " + session.remainingQuestions())
         if (session.remainingQuestions()==0) {
             val intent = Intent (this, QPSetupActivity::class.java)
             intent.putExtra("FILE_NAME", fileName)
             startActivity (intent)
         } else {
+            Log.d("Zkousec", "Else block. Remaining " + session.remainingQuestions())
             learnQuestionText.text = session.nextQuestion().question.text
             learnAnswerText.text = findAnswer(session.nextQuestion().question,true).toString()
             learnAnswerText.visibility = View.GONE

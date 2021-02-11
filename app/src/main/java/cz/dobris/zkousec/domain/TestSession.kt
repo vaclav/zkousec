@@ -51,7 +51,6 @@ class TestSession(
         val toProcessString = toProcess.map { encodeQuestionStatus(it) }.joinToString()
         val answeredCorrectlyString = answeredCorrectly.map { encodeQuestionStatus(it) }.joinToString()
         val answeredIncorrectlyString = answeredIncorrectly.map { encodeQuestionStatus(it) }.joinToString()
-        Log.d("Zkousec", "Saving " + toProcessString + ":" + answeredCorrectlyString + ":" + answeredIncorrectlyString)
         return SessionEntity(id, answerHandler.javaClass.name, toProcessString, answeredCorrectlyString, answeredIncorrectlyString)
     }
 
@@ -61,7 +60,7 @@ class TestSession(
     companion object {
         fun fromSessionEntity(qp: QuestionPack, entity: SessionEntity): TestSession {
             val ah =
-                if (entity.answerHandler == "SimpleAnswerHandler") SimpleAnswerHandler() else RetryIncorrectAnswerHandler()
+                if (entity.answerHandler!=null && entity.answerHandler.contains("SimpleAnswerHandler")) SimpleAnswerHandler() else RetryIncorrectAnswerHandler()
             val toProcess = parseList(qp, entity.toProcess)
             val answeredCorrectly = parseList(qp, entity.answeredCorrectly)
             val answeredIncorrectly = parseList(qp, entity.answeredIncorrectly)
@@ -69,7 +68,6 @@ class TestSession(
         }
 
         private fun parseList(qp: QuestionPack, entries: String?): MutableList<QuestionStatus> {
-            Log.d("Zkousec", "Data read: " + entries)
             if (entries != null && entries.trim().length > 0) {
                 val l = mutableListOf<QuestionStatus>()
                 l.addAll(entries.split(",").map {

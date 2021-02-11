@@ -146,10 +146,8 @@ class MainActivity : AppCompatActivity() {
         }
         for (fileName in listOfFiles) {
             arrayAdapter.add(fileName)
-            Log.d("Zkousec", fileName + ":" + arrayAdapter.javaClass)
         }
 
-        Log.d("Zkousec", "Last session: " + lastQuestionPackId)
         if (lastQuestionPackId != null) {
             Card_qp_nameText.text = lastQuestionPackId
             val handler = Handler()

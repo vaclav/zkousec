@@ -134,6 +134,7 @@
             android:id="@+id/chipLearn"
             android:layout_width="@dimen/_100sdp"
             android:layout_height="wrap_content"
+            android:checkable="true"
             android:clickable="true"
             android:text="Learn"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"

@@ -12,7 +12,6 @@ class DBHelper {
 
         private fun buildDatabase(context : Context) : ZkousecDatabase {
             if (db==null) {
-                Log.d("Zkousec", "Building database ${db!=null}")
                 db = Room.databaseBuilder(context, ZkousecDatabase::class.java, "database-name").build()
             }
             return db!!
@@ -35,10 +34,8 @@ class DBHelper {
             val loadedSessionEntity = sessionDatabase.loadAllById(fileName)
             val qp = Storage.loadQFile(fileName, context)
             return if (loadedSessionEntity != null) {
-                Log.d("Zkousec", "Successfully loaded a session!!!")
                 TestSession.fromSessionEntity(qp, loadedSessionEntity)
             } else {
-                Log.d("Zkousec", "Creating a new session!!!")
                 val newSession = TestSession(qp)
                 sessionDatabase.insert(newSession.toSessionEntity())
                 newSession
