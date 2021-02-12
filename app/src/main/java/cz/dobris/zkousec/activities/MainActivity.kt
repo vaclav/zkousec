@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity() {
         refreshListOfQuestionPacks(arrayAdapter)
     }
 
-    fun refreshListOfQuestionPacks(arrayAdapter: ArrayAdapter<String>) {
+        fun refreshListOfQuestionPacks(arrayAdapter: ArrayAdapter<String>) {
         val listOfFiles = Storage.listQFiles(this)
         arrayAdapter.clear()
         if (listOfFiles.size == 0) {
@@ -147,8 +147,8 @@ class MainActivity : AppCompatActivity() {
         for (fileName in listOfFiles) {
             arrayAdapter.add(fileName)
         }
-
-        if (lastQuestionPackId != null) {
+        
+        if (lastQuestionPackId != null && listOfFiles.any { it.equals(lastQuestionPackId) }) {
             Card_qp_nameText.text = lastQuestionPackId
             val handler = Handler()
             thread {
