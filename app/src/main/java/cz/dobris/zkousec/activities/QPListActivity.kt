@@ -17,7 +17,7 @@ class QPListActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.ic_home -> {
                     startActivity(Intent(this, MainActivity::class.java))
-                    overridePendingTransition(0,0)
+                    overridePendingTransition(0, 0)
                     true
                 }
                 R.id.ic_download -> {

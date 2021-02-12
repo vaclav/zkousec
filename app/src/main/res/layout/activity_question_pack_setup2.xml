@@ -63,6 +63,7 @@
             android:layout_gravity="center"
             android:layout_margin="10sp"
             android:visibility="visible">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -71,16 +72,16 @@
                     android:id="@+id/imageView2"
                     android:layout_width="@dimen/_60sdp"
                     android:layout_height="@dimen/_60sdp"
-                    app:srcCompat="@drawable/correcttick"
-                    android:padding="@dimen/_10sdp"/>
+                    android:padding="@dimen/_10sdp"
+                    app:srcCompat="@drawable/correcttick" />
 
                 <TextView
                     android:id="@+id/CorrectlyAnsweredCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/_10sdp"
                     android:text="0"
-                    android:textSize="@dimen/_30ssp"
-                    android:padding="@dimen/_10sdp"/>
+                    android:textSize="@dimen/_30ssp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -91,6 +92,7 @@
             android:layout_gravity="center"
             android:layout_margin="10sp"
             android:visibility="visible">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -99,19 +101,18 @@
                     android:id="@+id/imageView3"
                     android:layout_width="@dimen/_60sdp"
                     android:layout_height="@dimen/_60sdp"
-                    app:srcCompat="@drawable/incorrecttick"
-                    android:padding="@dimen/_10sdp"/>
+                    android:padding="@dimen/_10sdp"
+                    app:srcCompat="@drawable/incorrecttick" />
 
                 <TextView
                     android:id="@+id/IncorrectlyAnsweredCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/_10sdp"
                     android:text="0"
-                    android:textSize="@dimen/_30ssp"
-                    android:padding="@dimen/_10sdp"/>
+                    android:textSize="@dimen/_30ssp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-
 
 
     </TableRow>
@@ -154,12 +155,12 @@
 
     <Button
         android:id="@+id/StartButton"
-        android:padding="@dimen/_10sdp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_30sdp"
         android:background="@drawable/roundstyle"
         android:backgroundTint="@color/colorPrimary"
+        android:padding="@dimen/_10sdp"
         android:text="Start"
         android:textColor="@android:color/white"
         android:textSize="@dimen/_14ssp"

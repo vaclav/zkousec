@@ -8,6 +8,8 @@ import android.graphics.Color
 import android.opengl.Visibility
 import android.os.Bundle
 import android.os.Handler
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -22,6 +24,7 @@ import cz.dobris.zkousec.R
 import cz.dobris.zkousec.db.DBHelper
 import cz.dobris.zkousec.fileStorage.Storage
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_question_pack_testing.*
 import kotlinx.android.synthetic.main.url_dialog.*
 import kotlinx.android.synthetic.main.url_dialog.view.*
 import kotlin.concurrent.thread
@@ -42,11 +45,13 @@ class MainActivity : AppCompatActivity() {
 
         loadLastQPid()
         title = "Home"
+        val vibrator = this.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1)
         listOfButtons.adapter = arrayAdapter
         refreshListOfQuestionPacks(arrayAdapter)
 
         listOfButtons.setOnItemClickListener { adapterView, view, position, id ->
+            vibrator.vibrate(VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE))
             val intent = Intent(this, QPSetupActivity::class.java)
             val item = arrayAdapter.getItem(position)
             intent.putExtra("FILE_NAME", item)
@@ -57,6 +62,7 @@ class MainActivity : AppCompatActivity() {
 
         //This part of code shows dialog to user with text field for downloading Question Pack from URL.
         addQuestionPackButton.setOnClickListener { v ->
+            vibrator.vibrate(VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE))
             val mDialogView = LayoutInflater.from(this).inflate(R.layout.url_dialog, null)
             val downloadDialog = AlertDialog.Builder(this)
                 .setView(mDialogView)
@@ -106,6 +112,7 @@ class MainActivity : AppCompatActivity() {
             false
         }
         cardView_recentlyUsedQP.setOnClickListener {
+            vibrator.vibrate(VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE))
             val intent = Intent(this, QPSetupActivity::class.java)
             intent.putExtra("FILE_NAME", lastQuestionPackId)
             startActivity(intent)

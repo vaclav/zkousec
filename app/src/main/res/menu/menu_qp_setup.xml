@@ -4,12 +4,12 @@
     tools:context="cz.dobris.zkousec.activities.MainActivity">
 
     <item
-        android:title="Delete"
         android:id="@+id/action_delete"
         android:icon="@drawable/ic_delete"
-        app:showAsAction="always"/>
+        android:title="Delete"
+        app:showAsAction="always" />
     <item
-        android:title="Settings"
         android:id="@+id/action_settings"
-        android:icon="@drawable/ic_settings"/>
+        android:icon="@drawable/ic_settings"
+        android:title="Settings" />
 </menu>

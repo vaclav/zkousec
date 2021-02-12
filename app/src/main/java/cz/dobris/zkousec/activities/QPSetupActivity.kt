@@ -6,26 +6,24 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.snackbar.Snackbar
 import cz.dobris.zkousec.R
 import cz.dobris.zkousec.db.DBHelper
 import cz.dobris.zkousec.domain.TestSession
 import cz.dobris.zkousec.fileStorage.Storage
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_question_pack_setup2.*
 import layout.QuestionPack
 import kotlin.concurrent.thread
 
 class QPSetupActivity : AppCompatActivity() {
-    lateinit var fileName : String
+    lateinit var fileName: String
     var session: TestSession? = null
-
     override fun onStart() {
         super.onStart()
 
@@ -40,7 +38,6 @@ class QPSetupActivity : AppCompatActivity() {
             }
 
 
-
         }
         TitleText.text = fileName.replace(".xml", "")
     }
@@ -50,23 +47,25 @@ class QPSetupActivity : AppCompatActivity() {
         setContentView(R.layout.activity_question_pack_setup2)
         title = ""
         fileName = intent.getStringExtra("FILE_NAME") ?: ""
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         TestingOptions.setOnCheckedChangeListener { chipGroup, i ->
-            when(TestingOptions.checkedChipId){
+            vibrator.vibrate(VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE))
+            when (TestingOptions.checkedChipId) {
                 chipTest.id -> StartButton.visibility = View.VISIBLE
                 chipLearn.id -> StartButton.visibility = View.VISIBLE
                 else -> StartButton.visibility = View.INVISIBLE
             }
         }
 
-        when(TestingOptions.checkedChipId){
+        when (TestingOptions.checkedChipId) {
             chipTest.id -> StartButton.visibility = View.VISIBLE
             chipLearn.id -> StartButton.visibility = View.VISIBLE
             else -> StartButton.visibility = View.INVISIBLE
         }
         StartButton.setOnClickListener {
             val handler = Handler()
-            when(TestingOptions.checkedChipId){
+            when (TestingOptions.checkedChipId) {
                 chipLearn.id -> intent = Intent(this, QPLearningActivity::class.java)
                 chipTest.id -> intent = Intent(this, QPTestingActivity::class.java)
             }
@@ -75,13 +74,17 @@ class QPSetupActivity : AppCompatActivity() {
             thread {
                 if (session == null) {
                     val qp = Storage.loadQFile(fileName, this)
-                    session = DBHelper.createTestSession(this, fileName, TestSession(qp, answerHandler =
-                    if (TestingOptions.checkedChipId==chipLearn.id) TestSession.RetryIncorrectAnswerHandler() else TestSession.SimpleAnswerHandler()))
+                    session = DBHelper.createTestSession(
+                        this, fileName, TestSession(
+                            qp, answerHandler =
+                            if (TestingOptions.checkedChipId == chipLearn.id) TestSession.RetryIncorrectAnswerHandler() else TestSession.SimpleAnswerHandler()
+                        )
+                    )
                     handler.post {
                         startActivity(intent)
                     }
-                }else{
-                    handler.post{
+                } else {
+                    handler.post {
                         AlertDialog.Builder(this)
                             .setTitle("Do you want to continue?")
                             .setPositiveButton("Continue",
@@ -119,14 +122,14 @@ class QPSetupActivity : AppCompatActivity() {
     }
 
     private fun updateVisuals(session: TestSession?, qp: QuestionPack) {
-        QuestionCount.text = "Number of questions in the set: " + if (session==null) qp.questions.size.toString() else session.qp.questions.size
-        CorrectlyAnsweredCount.text = if (session==null) "0" else session.correctlyAnsweredQuestions().size.toString();
-        IncorrectlyAnsweredCount.text = if (session==null) "0" else session.incorrectlyAnsweredQuestions().size.toString();
-        ToProcessCount.text = "Remaining questions: " + if (session==null) qp.questions.size.toString() else session.remainingQuestions().toString()
-        StartButton.text = if (session==null) "Start" else "Continue"
+        QuestionCount.text = "Number of questions in the set: " + if (session == null) qp.questions.size.toString() else session.qp.questions.size
+        CorrectlyAnsweredCount.text = if (session == null) "0" else session.correctlyAnsweredQuestions().size.toString();
+        IncorrectlyAnsweredCount.text = if (session == null) "0" else session.incorrectlyAnsweredQuestions().size.toString();
+        ToProcessCount.text = "Remaining questions: " + if (session == null) qp.questions.size.toString() else session.remainingQuestions().toString()
+        StartButton.text = if (session == null) "Start" else "Continue"
 
-        if (session != null){
-            when(session.answerHandler){
+        if (session != null) {
+            when (session.answerHandler) {
                 is TestSession.RetryIncorrectAnswerHandler -> {
                     chipLearn.isChecked = true
                     chipTest.isChecked = false
@@ -138,7 +141,7 @@ class QPSetupActivity : AppCompatActivity() {
             }
             chipLearn.isEnabled = false
             chipTest.isEnabled = false
-        }else{
+        } else {
             chipLearn.isEnabled = true
             chipTest.isEnabled = true
         }
@@ -147,26 +150,26 @@ class QPSetupActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId){
-                R.id.action_delete -> {
-                    AlertDialog.Builder(this)
-                        .setTitle("Delete file")
-                        .setMessage("Do you really want to delete the questions titled: " + fileName + "?")
-                        .setPositiveButton("Yes",
-                            DialogInterface.OnClickListener { dialog, which ->
-                                Toast.makeText(this, fileName + " has been deleted!",Toast.LENGTH_LONG).show()
-                                Storage.deleteQFile(fileName, this)
-                                thread {
-                                    val db = DBHelper.deleteTestSession(this, fileName)
-                                }
-                                startActivity(Intent(this, MainActivity::class.java))
-                            })
-                        .setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
+        return when (item.itemId) {
+            R.id.action_delete -> {
+                AlertDialog.Builder(this)
+                    .setTitle("Delete file")
+                    .setMessage("Do you really want to delete the questions titled: " + fileName + "?")
+                    .setPositiveButton("Yes",
+                        DialogInterface.OnClickListener { dialog, which ->
+                            Toast.makeText(this, fileName + " has been deleted!", Toast.LENGTH_LONG).show()
+                            Storage.deleteQFile(fileName, this)
+                            thread {
+                                val db = DBHelper.deleteTestSession(this, fileName)
+                            }
+                            startActivity(Intent(this, MainActivity::class.java))
                         })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show()
-                    return true
-                }
+                    .setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show()
+                return true
+            }
             R.id.action_settings -> {
                 // TODO
                 return true
@@ -176,11 +179,9 @@ class QPSetupActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_qp_setup,menu)
+        menuInflater.inflate(R.menu.menu_qp_setup, menu)
         return true
     }
-
-
 
 
 }

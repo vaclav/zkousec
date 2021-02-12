@@ -7,7 +7,7 @@ import cz.dobris.zkousec.R
 
 class QPResultsActivity : AppCompatActivity() {
 
-    lateinit var fileName : String
+    lateinit var fileName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

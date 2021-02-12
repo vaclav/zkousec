@@ -62,34 +62,34 @@
 
         <Button
             android:id="@+id/learnIKbutton"
-            android:padding="10dp"
-            android:layout_margin="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@drawable/roundstyle"
             android:backgroundTint="@android:color/holo_green_light"
+            android:padding="10dp"
             android:text="I know" />
 
         <Button
             android:id="@+id/learnShowAnswerButton"
-            android:padding="10dp"
-            android:layout_margin="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:background="@drawable/roundstyle"
             android:backgroundTint="@android:color/holo_orange_dark"
+            android:padding="10dp"
             android:text="Show answer" />
 
         <Button
             android:id="@+id/learnIDKbutton"
-            android:padding="10dp"
-            android:layout_margin="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
             android:background="@drawable/roundstyle"
             android:backgroundTint="@android:color/holo_red_light"
-            android:layout_weight="1"
+            android:padding="10dp"
             android:text="I dont know" />
 
 
