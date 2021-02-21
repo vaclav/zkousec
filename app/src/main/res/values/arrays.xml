@@ -12,6 +12,5 @@
         <item>only_test_mode</item>
         <item>only_learn_mode</item>
         <item>both_modes</item>
-
     </string-array>
 </resources>

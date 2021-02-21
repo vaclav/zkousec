@@ -1,6 +1,7 @@
 package cz.dobris.zkousec.activities
 
 import android.app.AlertDialog
+import android.app.NotificationManager
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -170,10 +171,6 @@ class QPSetupActivity : AppCompatActivity() {
                     .show()
                 return true
             }
-            R.id.action_settings -> {
-                // TODO
-                return true
-            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -181,6 +178,10 @@ class QPSetupActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_qp_setup, menu)
         return true
+    }
+
+    override fun onBackPressed() {
+        startActivity(Intent(this, MainActivity::class.java))
     }
 
 

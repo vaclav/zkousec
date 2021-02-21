@@ -1,15 +1,21 @@
 package cz.dobris.zkousec.activities
 
+import android.app.NotificationManager
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.*
+import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import androidx.preference.PreferenceManager
 import com.google.android.material.chip.Chip
 import cz.dobris.zkousec.R
 import cz.dobris.zkousec.db.DBHelper
@@ -36,6 +42,31 @@ class QPLearningActivity : AppCompatActivity() {
         fileName = intent.getStringExtra("FILE_NAME") ?: ""
         val vibrator = this.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
+
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val dnd = sharedPreferences.getString("reply","")
+        if (dnd.equals("only_learn_mode") || dnd.equals("both_modes")){
+            if (!(getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).isNotificationPolicyAccessGranted) {
+                AlertDialog.Builder(this)
+                    .setTitle("DND access is required")
+                    .setNegativeButton(
+                        "No", DialogInterface.OnClickListener{ dialog, which ->
+                            Toast.makeText(this, "Change DND settings!", Toast.LENGTH_LONG)
+                            startActivity(Intent(this,SettingsActivity::class.java).putExtra("FILE_NAME",fileName))
+                        }
+                    )
+                    .setPositiveButton(
+                        "Allow access",
+                        DialogInterface.OnClickListener { dialog, which ->
+                            val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
+                            startActivity(intent)
+                        })
+                    .show()
+            }else{
+                val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
+            }
+        }
 
         val handler = Handler()
         thread {
@@ -107,6 +138,14 @@ class QPLearningActivity : AppCompatActivity() {
             learnIKbutton.visibility = View.VISIBLE
             learnShowAnswerButton.visibility = View.GONE
         }
+    }
+
+    override fun onBackPressed() {
+        if ((getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).isNotificationPolicyAccessGranted) {
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
+        }
+        super.onBackPressed()
     }
 
 }
