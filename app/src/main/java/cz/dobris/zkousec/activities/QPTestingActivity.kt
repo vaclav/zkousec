@@ -98,6 +98,10 @@ class QPTestingActivity : AppCompatActivity() {
 
     private fun updateVisuals() {
         if (session.remainingQuestions() != 0) {
+            if ((getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).isNotificationPolicyAccessGranted) {
+                val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
+            }
             ContinueButton.isVisible = false
             modeHelper.setAnswerButtonsText(AnswerChip1, AnswerChip2, AnswerChip3, AnswerChip4)
             QuestionText.text = session.nextQuestion().question.text

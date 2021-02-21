@@ -109,6 +109,10 @@ class QPLearningActivity : AppCompatActivity() {
     private fun updateVisuals() {
         Log.d("Zkousec", "Remaining questions when updating visuals: " + session.remainingQuestions())
         if (session.remainingQuestions() == 0) {
+            if ((getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).isNotificationPolicyAccessGranted) {
+                val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
+            }
             val intent = Intent(this, QPSetupActivity::class.java)
             intent.putExtra("FILE_NAME", fileName)
             startActivity(intent)
