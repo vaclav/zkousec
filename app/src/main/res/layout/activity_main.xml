@@ -117,6 +117,7 @@
         android:layout_marginTop="20sp"
         android:background="@drawable/roundstyle"
         android:backgroundTint="@color/colorPrimary"
+        android:visibility="invisible"
         android:paddingLeft="20sp"
         android:paddingRight="20sp"
         android:text="Add question pack"
@@ -129,6 +130,7 @@
 
     <TextView
         android:id="@+id/QuestionPacksOnTheDeviceText"
+        android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -167,12 +169,12 @@
         app:srcCompat="@drawable/undraw_emptybox"
         tools:layout_editor_absoluteY="128dp" />
 
-    <ListView
-        android:id="@+id/listOfButtons"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Question packs have been moved to -Question Packs- section"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/QuestionPacksOnTheDeviceText" />

@@ -46,9 +46,10 @@ class MainActivity : AppCompatActivity() {
         loadLastQPid()
         title = "Home"
         val vibrator = this.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        refreshListOfQuestionPacks()
+        /*
         arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1)
         listOfButtons.adapter = arrayAdapter
-        refreshListOfQuestionPacks(arrayAdapter)
 
         listOfButtons.setOnItemClickListener { adapterView, view, position, id ->
             vibrator.vibrate(VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE))
@@ -58,9 +59,10 @@ class MainActivity : AppCompatActivity() {
             lastQuestionPackId = item
             saveLastQPid()
             startActivity(intent)
-        }
+        }*/
 
         //This part of code shows dialog to user with text field for downloading Question Pack from URL.
+        /*
         addQuestionPackButton.setOnClickListener { v ->
             vibrator.vibrate(VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE))
             val mDialogView = LayoutInflater.from(this).inflate(R.layout.url_dialog, null)
@@ -79,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                         Log.d("Zkousec", "Running in a new thread!")
                         try {
                             Storage.saveQFileFromUrl(urlByUser, testName, it.context)
-                            v.post { refreshListOfQuestionPacks(arrayAdapter) }
+                            //v.post { refreshListOfQuestionPacks(arrayAdapter) }
                         } catch (e: Exception) {
                             e.printStackTrace()
                             v.post { Toast.makeText(this, "Cannot download the file. " + e.message, Toast.LENGTH_SHORT).show() }
@@ -96,7 +98,7 @@ class MainActivity : AppCompatActivity() {
             downloadDialogShown.getUrlCancelButton.setOnClickListener {
                 downloadDialogShown.dismiss()
             }
-        }
+        }*/
         bottomNavigationView.setSelectedItemId(R.id.ic_home)
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -136,12 +138,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        refreshListOfQuestionPacks(arrayAdapter)
     }
 
-        fun refreshListOfQuestionPacks(arrayAdapter: ArrayAdapter<String>) {
+        fun refreshListOfQuestionPacks() {
         val listOfFiles = Storage.listQFiles(this)
-        arrayAdapter.clear()
+        //arrayAdapter.clear()
         if (listOfFiles.size == 0) {
             QuestionPacksOnTheDeviceText.text = "No question packs installed yet!"
             QuestionPacksOnTheDeviceText.setTextColor(Color.RED)
@@ -151,10 +152,7 @@ class MainActivity : AppCompatActivity() {
             QuestionPacksOnTheDeviceText.visibility = View.GONE
             imageView.visibility = View.GONE
         }
-        for (fileName in listOfFiles) {
-            arrayAdapter.add(fileName)
-        }
-        
+
         if (lastQuestionPackId != null && listOfFiles.any { it.equals(lastQuestionPackId) }) {
             Card_qp_nameText.text = lastQuestionPackId
             val handler = Handler()
@@ -174,7 +172,6 @@ class MainActivity : AppCompatActivity() {
             recentlyUsedQPHeaderTextView.visibility = View.GONE
             cardView_recentlyUsedQP.visibility = View.GONE
         }
-        arrayAdapter.notifyDataSetChanged()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

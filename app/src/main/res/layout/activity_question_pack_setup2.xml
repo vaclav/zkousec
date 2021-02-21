@@ -178,11 +178,11 @@
     <SeekBar
         android:id="@+id/seekBar"
         android:layout_width="match_parent"
-        android:layout_marginHorizontal="@dimen/_30sdp"
+        android:layout_marginHorizontal="@dimen/_70sdp"
         android:layout_marginTop="@dimen/_10sdp"
         android:layout_height="wrap_content"
-        android:min="0"
-        android:max="20"
+        android:min="1"
+        android:max="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tableRow" />

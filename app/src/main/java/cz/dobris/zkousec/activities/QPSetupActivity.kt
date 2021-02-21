@@ -36,6 +36,7 @@ class QPSetupActivity : AppCompatActivity() {
             }
             handler.post {
                 updateVisuals(session, qp)
+                saveLastQPid()
             }
 
 
@@ -184,5 +185,11 @@ class QPSetupActivity : AppCompatActivity() {
         startActivity(Intent(this, MainActivity::class.java))
     }
 
-
+    private fun saveLastQPid() {
+        val sharedPreferences = getSharedPreferences("lastQPcardPref", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.apply() {
+            putString("lastQPcardString", fileName)
+        }.apply()
+    }
 }
