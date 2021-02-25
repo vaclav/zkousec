@@ -2,9 +2,9 @@
     <!-- Reply Preference -->
     <string-array name="reply_entries">
         <item>Never</item>
-        <item>Only with test mode</item>
-        <item>Only with learn mode</item>
-        <item>Always with both modes</item>
+    <item>Only with test mode</item>
+    <item>Only with learn mode</item>
+    <item>Always with both modes</item>
     </string-array>
 
     <string-array name="reply_values">

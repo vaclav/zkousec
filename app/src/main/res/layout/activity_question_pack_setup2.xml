@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:id="@+id/imageView2"
+                    android:id="@+id/qp_result_card_correctIMG"
                     android:layout_width="@dimen/_60sdp"
                     android:layout_height="@dimen/_60sdp"
                     android:padding="@dimen/_10sdp"

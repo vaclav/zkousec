@@ -9,16 +9,14 @@ import android.os.Vibrator
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
-import android.view.MenuItem
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.dobris.zkousec.R
-import cz.dobris.zkousec.RecyclerAdapter
+import cz.dobris.zkousec.adapters.QPRecyclerAdapter
 import cz.dobris.zkousec.fileStorage.Storage
 import kotlinx.android.synthetic.main.activity_q_p_list.*
-import kotlinx.android.synthetic.main.activity_question_pack_learning.*
 import kotlinx.android.synthetic.main.url_dialog.*
 import kotlinx.android.synthetic.main.url_dialog.view.*
 
@@ -50,7 +48,7 @@ class QPListActivity : AppCompatActivity() {
         }
         postToList()
         recycler_view.layoutManager = LinearLayoutManager(this)
-        recycler_view.adapter = RecyclerAdapter(titlesList, descriptionList, tagList, tagColorList, vibrator)
+        recycler_view.adapter = QPRecyclerAdapter(titlesList, descriptionList, tagList, tagColorList, vibrator)
         recycler_view.setOnClickListener {
             vibrator.vibrate(VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE))
         }
@@ -73,7 +71,7 @@ class QPListActivity : AppCompatActivity() {
                         try {
                             Storage.saveQFileFromUrl(urlByUser, testName, it.context)
                             v.post {
-                                (recycler_view.adapter as RecyclerAdapter).notifyDataSetChanged()
+                                (recycler_view.adapter as QPRecyclerAdapter).notifyDataSetChanged()
                                 postToList()
                             }
                         } catch (e: Exception) {
