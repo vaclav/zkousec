@@ -12,7 +12,7 @@ class DBHelper {
 
         private fun buildDatabase(context : Context) : ZkousecDatabase {
             if (db==null) {
-                db = Room.databaseBuilder(context, ZkousecDatabase::class.java, "database-name").build()
+                db = Room.databaseBuilder(context, ZkousecDatabase::class.java, "database-name").fallbackToDestructiveMigration().build()
             }
             return db!!
         }
