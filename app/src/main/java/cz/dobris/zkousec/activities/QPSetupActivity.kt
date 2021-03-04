@@ -78,7 +78,7 @@ class QPSetupActivity : AppCompatActivity() {
                     val qp = Storage.loadQFile(fileName, this)
                     session = DBHelper.createTestSession(
                         this, fileName, TestSession(
-                            qp, answerHandler =
+                            qp, initializer = TestSession.AllQuestionsInitializer(), answerHandler =
                             if (TestingOptions.checkedChipId == chipLearn.id) TestSession.RetryIncorrectAnswerHandler() else TestSession.SimpleAnswerHandler()
                         )
                     )
