@@ -1,11 +1,13 @@
 package cz.dobris.zkousec.activities
 
+import android.app.Activity
 import android.app.NotificationManager
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.opengl.Visibility
 import android.os.*
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
@@ -17,9 +19,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.preference.PreferenceManager
 import com.google.android.material.chip.Chip
+import cz.dobris.zkousec.OnSwipeTouchListener
 import cz.dobris.zkousec.R
 import cz.dobris.zkousec.db.DBHelper
 import cz.dobris.zkousec.domain.TestSession
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_question_pack_learning.*
 import kotlinx.android.synthetic.main.activity_question_pack_testing.*
 import layout.Answer
@@ -33,6 +37,7 @@ class QPLearningActivity : AppCompatActivity() {
     */
     lateinit var fileName: String
     lateinit var session: TestSession
+    lateinit var vibrator: Vibrator
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +45,7 @@ class QPLearningActivity : AppCompatActivity() {
         setContentView(R.layout.activity_question_pack_learning)
 
         fileName = intent.getStringExtra("FILE_NAME") ?: ""
-        val vibrator = this.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        vibrator = this.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
 
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
@@ -83,27 +88,38 @@ class QPLearningActivity : AppCompatActivity() {
             updateButtons(false)
         }
         learnIKbutton.setOnClickListener {
-            vibrator.vibrate(VibrationEffect.createOneShot(40, VibrationEffect.DEFAULT_AMPLITUDE))
-            if (session.remainingQuestions() != 0) {
-                session.evaluateAnswer(findAnswer(session.nextQuestion().question, true))
-                thread {
-                    DBHelper.saveTestSession(this, session)
-                }
-            }
-            updateVisuals()
-            updateButtons(true)
+            processAnswer (true)
         }
         learnIDKbutton.setOnClickListener {
-            vibrator.vibrate(VibrationEffect.createOneShot(40, VibrationEffect.DEFAULT_AMPLITUDE))
-            if (session.remainingQuestions() != 0) {
-                session.evaluateAnswer(findAnswer(session.nextQuestion().question, false))
-                thread {
-                    DBHelper.saveTestSession(this, session)
+            processAnswer (false)
+        }
+        qplearnlayout.setOnTouchListener(object : OnSwipeTouchListener (this@QPLearningActivity) {
+            override fun onSwipeLeft() {
+                super.onSwipeLeft()
+                if (learnShowAnswerButton.visibility == View.GONE) {
+                    processAnswer(false)
                 }
             }
-            updateVisuals()
-            updateButtons(true)
+
+            override fun onSwipeRight() {
+                super.onSwipeRight()
+                if (learnShowAnswerButton.visibility == View.GONE) {
+                    processAnswer(true)
+                }
+            }
+        })
+    }
+
+    private fun processAnswer (know: Boolean) {
+        vibrator.vibrate(VibrationEffect.createOneShot(40, VibrationEffect.DEFAULT_AMPLITUDE))
+        if (session.remainingQuestions() != 0) {
+            session.evaluateAnswer(findAnswer(session.nextQuestion().question, know))
+            thread {
+                DBHelper.saveTestSession(this, session)
+            }
         }
+        updateVisuals()
+        updateButtons(true)
     }
 
     private fun updateVisuals() {

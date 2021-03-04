@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/qplearnlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.QPLearningActivity">
@@ -61,15 +62,15 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/learnIKbutton"
+            android:id="@+id/learnIDKbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@drawable/roundstyle"
-            android:backgroundTint="@android:color/holo_green_light"
+            android:backgroundTint="@android:color/holo_red_light"
             android:padding="10dp"
-            android:text="I know" />
+            android:text="I don't know" />
 
         <Button
             android:id="@+id/learnShowAnswerButton"
@@ -82,18 +83,38 @@
             android:text="Show answer" />
 
         <Button
-            android:id="@+id/learnIDKbutton"
+            android:id="@+id/learnIKbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@drawable/roundstyle"
-            android:backgroundTint="@android:color/holo_red_light"
+            android:backgroundTint="@android:color/holo_green_light"
             android:padding="10dp"
-            android:text="I dont know" />
+            android:text="I know" />
 
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:srcCompat="@drawable/greenarrow" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:srcCompat="@drawable/redarrow" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
