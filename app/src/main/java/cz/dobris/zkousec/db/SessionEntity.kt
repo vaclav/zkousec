@@ -9,5 +9,7 @@ class SessionEntity(@PrimaryKey val uid: String,
                     @ColumnInfo(name = "answer_handler") val answerHandler: String?,
                     @ColumnInfo(name = "to_process") val toProcess: String?,
                     @ColumnInfo(name = "answered_correctly") val answeredCorrectly: String?,
-                    @ColumnInfo(name = "answered_incorrectly") val answeredIncorrectly: String?) {
+                    @ColumnInfo(name = "answered_incorrectly") val answeredIncorrectly: String?,
+                    @ColumnInfo(name = "learnMode") val learnMode: Boolean?
+) {
 }

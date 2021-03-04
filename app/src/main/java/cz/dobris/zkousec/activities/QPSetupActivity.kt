@@ -78,7 +78,9 @@ class QPSetupActivity : AppCompatActivity() {
                     val qp = Storage.loadQFile(fileName, this)
                     session = DBHelper.createTestSession(
                         this, fileName, TestSession(
-                            qp, initializer = TestSession.AllQuestionsInitializer(), answerHandler =
+                            qp,
+                            learnMode = TestingOptions.checkedChipId == chipLearn.id,
+                            initializer = TestSession.AllQuestionsInitializer(), answerHandler =
                             if (TestingOptions.checkedChipId == chipLearn.id) TestSession.RetryIncorrectAnswerHandler() else TestSession.SimpleAnswerHandler()
                         )
                     )
@@ -131,15 +133,12 @@ class QPSetupActivity : AppCompatActivity() {
         StartButton.text = if (session == null) "Start" else "Continue"
 
         if (session != null) {
-            when (session.answerHandler) {
-                is TestSession.RetryIncorrectAnswerHandler -> {
-                    chipLearn.isChecked = true
-                    chipTest.isChecked = false
-                }
-                is TestSession.SimpleAnswerHandler -> {
-                    chipLearn.isChecked = false
-                    chipTest.isChecked = true
-                }
+            if (session.learnMode) {
+                chipLearn.isChecked = true
+                chipTest.isChecked = false
+            } else {
+                chipLearn.isChecked = false
+                chipTest.isChecked = true
             }
             chipLearn.isEnabled = false
             chipTest.isEnabled = false
@@ -147,8 +146,6 @@ class QPSetupActivity : AppCompatActivity() {
             chipLearn.isEnabled = true
             chipTest.isEnabled = true
         }
-
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
