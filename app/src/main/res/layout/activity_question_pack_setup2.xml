@@ -46,13 +46,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/QuestionCount" />
 
+    <TextView
+        android:id="@+id/LastUsed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Last Used:"
+        android:textAlignment="center"
+        android:textSize="@dimen/_15ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ToProcessCount" />
+
     <TableRow
         android:id="@+id/tableRow"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:gravity="center_horizontal|center_vertical"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/ToProcessCount"
+        app:layout_constraintTop_toBottomOf="@+id/LastUsed"
         tools:layout_editor_absoluteX="0dp">
 
 

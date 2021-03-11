@@ -1,7 +1,6 @@
 package cz.dobris.zkousec.activities
 
 import android.app.AlertDialog
-import android.app.NotificationManager
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -20,6 +19,7 @@ import cz.dobris.zkousec.domain.TestSession
 import cz.dobris.zkousec.fileStorage.Storage
 import kotlinx.android.synthetic.main.activity_question_pack_setup2.*
 import layout.QuestionPack
+import java.time.format.DateTimeFormatter
 import kotlin.concurrent.thread
 
 class QPSetupActivity : AppCompatActivity() {
@@ -130,6 +130,8 @@ class QPSetupActivity : AppCompatActivity() {
         CorrectlyAnsweredCount.text = if (session == null) "0" else session.correctlyAnsweredQuestions().size.toString();
         IncorrectlyAnsweredCount.text = if (session == null) "0" else session.incorrectlyAnsweredQuestions().size.toString();
         ToProcessCount.text = "Remaining questions: " + if (session == null) qp.questions.size.toString() else session.remainingQuestions().toString()
+        val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd. MM. yyyy HH:mm")
+        LastUsed.text = "Last used: " + if (session == null) "Unknown" else formatter.format(session.lastUsed)
         StartButton.text = if (session == null) "Start" else "Continue"
 
         if (session != null) {

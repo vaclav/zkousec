@@ -5,8 +5,8 @@ import cz.dobris.zkousec.db.SessionEntity
 import layout.Answer
 import layout.Question
 import layout.QuestionPack
-import java.time.LocalDateTime
-import kotlin.IllegalArgumentException
+import java.time.*
+import java.util.*
 import kotlin.random.Random
 
 class TestSession(
@@ -19,7 +19,7 @@ class TestSession(
     private val answeredIncorrectly: MutableList<QuestionStatus> = mutableListOf<QuestionStatus>()
 ) {
     val id = qp.fileName
-//    var lastChange : LocalDateTime.now()
+    var lastUsed : LocalDateTime = LocalDateTime.now()
 
     init { }
 
@@ -51,11 +51,21 @@ class TestSession(
     //  ----------------- Database persistence code
 
     fun toSessionEntity(): SessionEntity {
-        Log.d("Zkousec", "Is learn mode (write):"+learnMode)
+        Log.d("Zkousec", "Is learn mode (write):" + learnMode)
         val toProcessString = toProcess.map { encodeQuestionStatus(it) }.joinToString()
         val answeredCorrectlyString = answeredCorrectly.map { encodeQuestionStatus(it) }.joinToString()
         val answeredIncorrectlyString = answeredIncorrectly.map { encodeQuestionStatus(it) }.joinToString()
-        return SessionEntity(id, answerHandler.javaClass.name, toProcessString, answeredCorrectlyString, answeredIncorrectlyString, learnMode)
+
+        lastUsed = LocalDateTime.now()
+        val zdt: ZonedDateTime = ZonedDateTime.of(lastUsed, ZoneId.systemDefault())
+        val date: Long = zdt.toInstant().toEpochMilli()
+        return SessionEntity(id,
+            answerHandler.javaClass.name,
+            toProcessString,
+            answeredCorrectlyString,
+            answeredIncorrectlyString,
+            learnMode,
+            date)
     }
 
     private fun encodeQuestionStatus(it: QuestionStatus) =
@@ -63,7 +73,7 @@ class TestSession(
 
     companion object {
         fun fromSessionEntity(qp: QuestionPack, entity: SessionEntity): TestSession {
-            Log.d("Zkousec", "Is learn mode (read):"+entity.learnMode)
+            Log.d("Zkousec", "Is learn mode (read):" + entity.learnMode)
             val isLearnMode = if (entity.learnMode==null) false else entity.learnMode
             val ah =
                 if (entity.answerHandler!=null && entity.answerHandler.contains("SimpleAnswerHandler")) SimpleAnswerHandler()
@@ -71,7 +81,10 @@ class TestSession(
             val toProcess = parseList(qp, entity.toProcess)
             val answeredCorrectly = parseList(qp, entity.answeredCorrectly)
             val answeredIncorrectly = parseList(qp, entity.answeredIncorrectly)
-            return TestSession(qp, AllQuestionsInitializer(), ah, isLearnMode, toProcess, answeredCorrectly, answeredIncorrectly)
+            val testSession = TestSession(qp, AllQuestionsInitializer(), ah, isLearnMode, toProcess, answeredCorrectly, answeredIncorrectly)
+            val lastUsed = entity.lastUsed
+            testSession.lastUsed = LocalDateTime.ofInstant(Instant.ofEpochMilli(lastUsed!!), TimeZone.getDefault().toZoneId());
+            return testSession
         }
 
         private fun parseList(qp: QuestionPack, entries: String?): MutableList<QuestionStatus> {
