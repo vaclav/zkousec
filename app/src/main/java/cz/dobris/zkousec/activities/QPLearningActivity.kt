@@ -137,6 +137,7 @@ class QPLearningActivity : AppCompatActivity() {
             learnQuestionText.text = session.nextQuestion().question.text
             learnAnswerText.text = findAnswer(session.nextQuestion().question, true).toString()
             learnAnswerText.visibility = View.GONE
+            remainingQuestionsText.text = "Remaining: " + session.remainingQuestions().toString()
         }
     }
 
@@ -152,10 +153,14 @@ class QPLearningActivity : AppCompatActivity() {
         if (showButtonVisibility) {
             learnIDKbutton.visibility = View.GONE
             learnIKbutton.visibility = View.GONE
+            rightArrow.visibility = View.GONE
+            wrongArrow.visibility = View.GONE
             learnShowAnswerButton.visibility = View.VISIBLE
         } else {
             learnIDKbutton.visibility = View.VISIBLE
             learnIKbutton.visibility = View.VISIBLE
+            rightArrow.visibility = View.VISIBLE
+            wrongArrow.visibility = View.VISIBLE
             learnShowAnswerButton.visibility = View.GONE
         }
     }
