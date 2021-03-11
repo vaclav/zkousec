@@ -76,8 +76,8 @@
             android:layout_margin="10sp"
             android:clickable="true"
             android:foreground="?selectableItemBackground"
-            app:cardCornerRadius="@dimen/_10sdp"
-            android:visibility="visible">
+            android:visibility="visible"
+            app:cardCornerRadius="@dimen/_10sdp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -108,8 +108,8 @@
             android:layout_margin="10sp"
             android:clickable="true"
             android:foreground="?selectableItemBackground"
-            app:cardCornerRadius="@dimen/_10sdp"
-            android:visibility="visible">
+            android:visibility="visible"
+            app:cardCornerRadius="@dimen/_10sdp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -136,11 +136,11 @@
     </TableRow>
 
     <com.google.android.material.chip.ChipGroup
-        android:layout_margin="@dimen/_15ssp"
         android:id="@+id/TestingOptions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_margin="@dimen/_15ssp"
         app:checkedChip="@id/chipLearn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
@@ -171,30 +171,56 @@
 
     </com.google.android.material.chip.ChipGroup>
 
-    <Button
-        android:id="@+id/StartButton"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_30sdp"
-        android:background="@drawable/roundstyle"
-        android:backgroundTint="@color/colorPrimary"
-        android:padding="@dimen/_10sdp"
-        android:text="Start"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/_14ssp"
-        android:textStyle="bold"
+        android:layout_marginBottom="64dp"
+        android:gravity="top"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TestingOptions" />
+        app:layout_constraintTop_toBottomOf="@+id/TestingOptions">
+
+        <Button
+            android:id="@+id/resetButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:background="@drawable/roundstyle"
+            android:backgroundTint="@color/colorPrimary"
+            android:padding="@dimen/_10sdp"
+            android:text="Reset"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/StartButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:background="@drawable/roundstyle"
+            android:backgroundTint="@color/colorPrimary"
+            android:padding="@dimen/_10sdp"
+            android:text="Start"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
     <SeekBar
         android:id="@+id/seekBar"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_70sdp"
         android:layout_marginTop="@dimen/_10sdp"
-        android:layout_height="wrap_content"
-        android:min="1"
         android:max="3"
+        android:min="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tableRow" />

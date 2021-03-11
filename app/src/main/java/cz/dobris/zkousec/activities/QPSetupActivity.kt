@@ -74,7 +74,7 @@ class QPSetupActivity : AppCompatActivity() {
             intent.putExtra("FILE_NAME", fileName)
 
             thread {
-                if (session == null) {
+                if (session == null || session!!.remainingQuestions() == 0) {
                     val qp = Storage.loadQFile(fileName, this)
                     session = DBHelper.createTestSession(
                         this, fileName, TestSession(
@@ -89,7 +89,8 @@ class QPSetupActivity : AppCompatActivity() {
                     }
                 } else {
                     handler.post {
-                        AlertDialog.Builder(this)
+                        startActivity (intent)
+                        /*AlertDialog.Builder(this)
                             .setTitle("Do you want to continue?")
                             .setPositiveButton("Continue",
                                 DialogInterface.OnClickListener { dialog, which ->
@@ -105,8 +106,19 @@ class QPSetupActivity : AppCompatActivity() {
                                     }
                                 }
                             })
-                            .show()
+                            .show()*/
                     }
+                }
+            }
+        }
+        resetButton.setOnClickListener {
+            val handler = Handler ()
+            thread {
+                DBHelper.deleteTestSession(this, fileName)
+                session = null
+                val qp = Storage.loadQFile(fileName, this)
+                handler.post {
+                    updateVisuals(session, qp);
                 }
             }
         }
@@ -133,6 +145,7 @@ class QPSetupActivity : AppCompatActivity() {
         val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd. MM. yyyy HH:mm")
         LastUsed.text = "Last used: " + if (session == null) "Unknown" else formatter.format(session.lastUsed)
         StartButton.text = if (session == null) "Start" else "Continue"
+        resetButton.visibility = if (session == null) View.GONE else View.VISIBLE
 
         if (session != null) {
             if (session.learnMode) {
