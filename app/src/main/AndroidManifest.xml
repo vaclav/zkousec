@@ -22,7 +22,6 @@
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".activities.MainActivity"/>
-        <activity android:name=".activities.QPListActivity" />
         <activity android:name=".activities.QPLearningActivity" />
         <activity android:name=".activities.QPResultsActivity" />
         <activity android:name=".activities.QPTestingActivity" />

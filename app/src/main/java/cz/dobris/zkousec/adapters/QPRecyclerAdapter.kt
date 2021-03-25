@@ -38,9 +38,11 @@ class QPRecyclerAdapter (private var titles: List<String>, private var descripti
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.itemTitle.text = titles[position]
+        holder.itemTitle.text = titles[position].replace(".xml","")
         holder.itemDescription.text = description[position]
         holder.itemTag.text = tag[position]
+        if (tag[position] == "")
+            holder.itemTag.visibility = View.INVISIBLE
         /*
         holder.itemTag.background.setTint(
             when(tagColor[position]){

@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.room.Room
 import cz.dobris.zkousec.domain.TestSession
 import cz.dobris.zkousec.fileStorage.Storage
-import java.lang.IllegalArgumentException
 
 class DBHelper {
     companion object {
@@ -37,7 +36,9 @@ class DBHelper {
             return if (loadedSessionEntity != null) {
                 TestSession.fromSessionEntity(qp, loadedSessionEntity)
             } else {
-                throw IllegalArgumentException("The session for $fileName does not exist.")
+                val newSession = TestSession(qp)
+                sessionDatabase.insert(newSession.toSessionEntity())
+                newSession
             }
         }
 

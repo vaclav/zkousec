@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_10sdp"
             android:text="Learn mode"
-            android:enabled="false"
+            android:enabled="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textSize="@dimen/_14ssp"
             app:layout_constraintEnd_toEndOf="parent"

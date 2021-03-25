@@ -7,178 +7,25 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
-
-    <TextView
-        android:id="@+id/recentlyUsedQPHeaderTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Recently Used Question Pack"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:layout_width="match_parent"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/nav_menu">
-
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView_recentlyUsedQP"
-        android:layout_width="match_parent"
-        android:layout_height="100sp"
-        android:layout_gravity="center"
-        android:layout_margin="10sp"
+        android:layout_margin="@dimen/_20sdp"
         android:clickable="true"
-        android:foreground="?selectableItemBackground"
-        app:cardCornerRadius="@dimen/_10sdp"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recentlyUsedQPHeaderTextView">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="100sp"
-            android:layout_gravity="center"
-            android:layout_margin="10sp"
-            android:backgroundTint="@android:color/white">
-
-            <TextView
-                android:id="@+id/Card_qp_nameText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10sp"
-                android:text="Name"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/Card_qp_dateText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10sp"
-                android:text="Date: 18.12. 2020"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/Card_qp_CAText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10sp"
-                android:text="Correctly: "
-                android:textColor="@android:color/holo_green_dark"
-                android:textStyle="italic"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/Card_qp_ICAText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10sp"
-                android:text="Incorrectly: "
-                android:textColor="@android:color/holo_red_dark"
-                android:textStyle="italic"
-                app:layout_constraintBottom_toTopOf="@+id/Card_qp_RAText"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/Card_qp_CAText" />
-
-            <TextView
-                android:id="@+id/Card_qp_RAText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10sp"
-                android:text="Remaining: "
-                android:textColor="@android:color/darker_gray"
-                android:textStyle="italic"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <Button
-        android:id="@+id/addQuestionPackButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20sp"
-        android:background="@drawable/roundstyle"
-        android:backgroundTint="@color/colorPrimary"
-        android:visibility="invisible"
-        android:paddingLeft="20sp"
-        android:paddingRight="20sp"
-        android:text="Add question pack"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cardView_recentlyUsedQP" />
-
-    <TextView
-        android:id="@+id/QuestionPacksOnTheDeviceText"
-        android:visibility="invisible"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Question packs already on the device:"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addQuestionPackButton" />
-
-    <TextView
-        android:id="@+id/noQuestionsView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="No question packs installed yet!"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addQuestionPackButton" />
-
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="40dp"
-        android:paddingRight="40dp"
-        android:visibility="gone"
+        android:focusable="true"
+        android:tint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/QuestionPacksOnTheDeviceText"
-        app:srcCompat="@drawable/undraw_emptybox"
-        tools:layout_editor_absoluteY="128dp" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Question packs have been moved to -Question Packs- section"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/QuestionPacksOnTheDeviceText" />
-
+        app:srcCompat="@drawable/ic_round_add" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

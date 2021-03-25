@@ -15,7 +15,6 @@ import cz.dobris.zkousec.adapters.QPResultsRecyclerAdapter
 import cz.dobris.zkousec.db.DBHelper
 import cz.dobris.zkousec.domain.TestSession
 import cz.dobris.zkousec.fileStorage.Storage
-import kotlinx.android.synthetic.main.activity_q_p_list.*
 import kotlinx.android.synthetic.main.activity_question_pack_results.*
 import layout.Answer
 import layout.Question
