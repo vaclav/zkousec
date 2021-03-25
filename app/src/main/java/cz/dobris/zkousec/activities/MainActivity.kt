@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
     }
 
-        fun refreshListOfQuestionPacks() {
+    fun refreshListOfQuestionPacks() {
         val listOfFiles = Storage.listQFiles(this)
         //arrayAdapter.clear()
         if (listOfFiles.size == 0) {
@@ -157,15 +157,23 @@ class MainActivity : AppCompatActivity() {
             Card_qp_nameText.text = lastQuestionPackId
             val handler = Handler()
             thread {
-                val session = DBHelper.getTestSession(this, lastQuestionPackId!!)
+                if (DBHelper.existsTestSession(this, lastQuestionPackId!!)) {
+                    val session = DBHelper.getTestSession(this, lastQuestionPackId!!)
+                    handler.post {
+                        Card_qp_RAText.text = session.remainingQuestions().toString()
+                        Card_qp_CAText.text = session.correctlyAnsweredQuestions().size.toString()
+                        Card_qp_ICAText.text = session.incorrectlyAnsweredQuestions().size.toString()
+                    }
+                } else {
+                    handler.post {
+                        Card_qp_RAText.text = Storage.loadQFile(lastQuestionPackId!!, this).questions.size.toString()
+                        Card_qp_CAText.text = "N/A"
+                        Card_qp_ICAText.text = "N/A"
+                    }
+                }
                 handler.post {
-                    Card_qp_RAText.text = session.remainingQuestions().toString()
-                    Card_qp_CAText.text = session.correctlyAnsweredQuestions().size.toString()
-                    Card_qp_ICAText.text = session.incorrectlyAnsweredQuestions().size.toString()
                     recentlyUsedQPHeaderTextView.visibility = View.VISIBLE
                     cardView_recentlyUsedQP.visibility = View.VISIBLE
-                    //TODO store and recover the time
-                    //TODO store the lastQuestionPackId in the db
                 }
             }
         } else {

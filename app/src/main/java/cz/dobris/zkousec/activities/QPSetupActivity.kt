@@ -38,8 +38,6 @@ class QPSetupActivity : AppCompatActivity() {
                 updateVisuals(session, qp)
                 saveLastQPid()
             }
-
-
         }
         TitleText.text = fileName.replace(".xml", "")
     }
