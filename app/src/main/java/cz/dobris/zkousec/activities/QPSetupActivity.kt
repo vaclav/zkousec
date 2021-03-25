@@ -36,7 +36,6 @@ class QPSetupActivity : AppCompatActivity() {
             }
             handler.post {
                 updateVisuals(session, qp)
-                saveLastQPid()
             }
 
 
