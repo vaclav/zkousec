@@ -3,6 +3,10 @@
 
 
     <PreferenceCategory app:title="General">
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Study mode">
         <ListPreference
             android:defaultValue="swipe"
             app:key="typeOfAnswer"
