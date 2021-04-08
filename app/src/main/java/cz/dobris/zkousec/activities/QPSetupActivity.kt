@@ -4,22 +4,16 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
 import cz.dobris.zkousec.R
 import cz.dobris.zkousec.db.DBHelper
 import cz.dobris.zkousec.domain.TestSession
@@ -56,6 +50,7 @@ class QPSetupActivity : AppCompatActivity() {
         setContentView(R.layout.activity_question_pack_setup2)
         title = ""
         fileName = intent.getStringExtra("FILE_NAME") ?: ""
+
         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         TestingOptions.setOnCheckedChangeListener { chipGroup, i ->
@@ -71,6 +66,15 @@ class QPSetupActivity : AppCompatActivity() {
             chipTest.id -> StartButton.visibility = View.VISIBLE
             chipLearn.id -> StartButton.visibility = View.VISIBLE
             else -> StartButton.visibility = View.INVISIBLE
+        }
+
+        //Obtain question pack
+        val qpHandler = Handler()
+        thread {
+            val qp = Storage.loadQFile(fileName, this)
+            qpHandler.post {
+
+            }
         }
 
         editTextNumberStart.setOnEditorActionListener { v, actionId, event ->
@@ -105,9 +109,9 @@ class QPSetupActivity : AppCompatActivity() {
 
             thread {
                 if (session == null || session!!.remainingQuestions() == 0) {
-                    clampEditTextStart()
-                    clampEditTextEnd()
                     val qp = Storage.loadQFile(fileName, this)
+                    clampEditTextStartAndEnd(qp)
+//                    clampEditTextEnd()
                     session = DBHelper.createTestSession(
                         this, fileName, TestSession(
                             qp,
@@ -224,6 +228,21 @@ class QPSetupActivity : AppCompatActivity() {
         editor.apply() {
             putString("lastQPcardString", fileName)
         }.apply()
+    }
+
+    private fun clampEditTextStartAndEnd(qp: QuestionPack) {
+        val start = editTextNumberStart.text.toString().toInt()
+        val end = editTextNumberEnd.text.toString().toInt()
+        if (start < 1)
+            editTextNumberStart.setText("1")
+        if (end < 1)
+            editTextNumberEnd.setText("1")
+        if (start > qp.questions.size)
+            editTextNumberStart.setText(qp.questions.size.toString())
+        if (end > qp.questions.size)
+            editTextNumberEnd.setText(qp.questions.size.toString())
+        if (start > end)
+            editTextNumberStart.setText(end.toString())
     }
 
     private fun clampEditTextStart () {
