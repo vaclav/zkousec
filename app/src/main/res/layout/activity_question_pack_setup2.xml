@@ -142,10 +142,10 @@
         android:layout_gravity="center"
         android:layout_margin="@dimen/_15ssp"
         app:checkedChip="@id/chipLearn"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar"
         app:singleLine="false"
         app:singleSelection="true">
 
@@ -172,6 +172,7 @@
     </com.google.android.material.chip.ChipGroup>
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="64dp"
@@ -179,8 +180,7 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TestingOptions">
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/resetButton"
@@ -213,17 +213,57 @@
 
     </LinearLayout>
 
-    <SeekBar
-        android:id="@+id/seekBar"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_70sdp"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:max="3"
-        android:min="1"
+        android:gravity="top"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/TestingOptions"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableRow" />
+        app:layout_constraintTop_toBottomOf="@+id/tableRow">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:text="Questions:"
+            android:textSize="20sp"
+            tools:text="Questions:" />
+
+        <EditText
+            android:id="@+id/editTextNumberStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:imeOptions="actionSend"
+            android:inputType="number"
+            android:scrollHorizontally="false"
+            android:text="0"
+            android:textAlignment="viewStart" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="-"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            tools:text="-" />
+
+        <EditText
+            android:id="@+id/editTextNumberEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:imeOptions="actionSend"
+            android:inputType="number"
+            android:scrollHorizontally="false"
+            tools:text="10" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
