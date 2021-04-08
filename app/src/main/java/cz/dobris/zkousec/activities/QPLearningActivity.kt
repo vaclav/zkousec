@@ -108,6 +108,17 @@ class QPLearningActivity : AppCompatActivity() {
                 }
             }
         })
+        val typeOfAnswer = sharedPreferences.getString("typeOfAnswer","")
+        if (typeOfAnswer.equals("buttons")){
+            wrongArrow.visibility = View.INVISIBLE
+            rightArrow.visibility = View.INVISIBLE
+        }
+        if (typeOfAnswer.equals("swipe")){
+            learnIDKbutton.visibility = View.INVISIBLE
+            learnIKbutton.visibility = View.INVISIBLE
+        }
+
+
     }
 
     private fun processAnswer (know: Boolean) {
@@ -149,19 +160,32 @@ class QPLearningActivity : AppCompatActivity() {
         throw java.lang.IllegalArgumentException("Question '${q.text}', position: ${q.position} has no ${if (correct) "right" else "wrong"} answers")
     }
 
+
     private fun updateButtons(showButtonVisibility: Boolean) {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val typeOfAnswer = sharedPreferences.getString("typeOfAnswer","")
         if (showButtonVisibility) {
-            learnIDKbutton.visibility = View.GONE
-            learnIKbutton.visibility = View.GONE
-            rightArrow.visibility = View.GONE
-            wrongArrow.visibility = View.GONE
-            learnShowAnswerButton.visibility = View.VISIBLE
+            if (typeOfAnswer.equals("swipe")){
+                learnShowAnswerButton.visibility = View.VISIBLE
+                rightArrow.visibility = View.GONE
+                wrongArrow.visibility = View.GONE
+            }else{
+                learnIDKbutton.visibility = View.GONE
+                learnIKbutton.visibility = View.GONE
+
+                learnShowAnswerButton.visibility = View.VISIBLE
+            }
+
         } else {
-            learnIDKbutton.visibility = View.VISIBLE
-            learnIKbutton.visibility = View.VISIBLE
-            rightArrow.visibility = View.VISIBLE
-            wrongArrow.visibility = View.VISIBLE
-            learnShowAnswerButton.visibility = View.GONE
+            if (typeOfAnswer.equals("swipe")){
+                learnShowAnswerButton.visibility = View.GONE
+                rightArrow.visibility = View.VISIBLE
+                wrongArrow.visibility = View.VISIBLE
+            }else{
+                learnIDKbutton.visibility = View.VISIBLE
+                learnIKbutton.visibility = View.VISIBLE
+                learnShowAnswerButton.visibility = View.GONE
+            }
         }
     }
 

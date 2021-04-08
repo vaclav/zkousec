@@ -1,17 +1,18 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
 
     <PreferenceCategory app:title="General">
-
+        <ListPreference
+            android:defaultValue="swipe"
+            app:key="typeOfAnswer"
+            app:title="Answer by"
+            app:useSimpleSummaryProvider="true"
+            android:entries="@array/reply_entries_typeOfAnswer"
+            android:entryValues="@array/reply_values_typeOfAnswer"
+            />
     </PreferenceCategory>
 
-
-    <PreferenceCategory app:title="Test mode settings">
-    </PreferenceCategory>
-
-
-    <PreferenceCategory app:title="Learn mode settings">
-    </PreferenceCategory>
 
 
     <PreferenceCategory app:title="Advanced">

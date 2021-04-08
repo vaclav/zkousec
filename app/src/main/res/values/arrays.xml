@@ -13,4 +13,13 @@
         <item>only_learn_mode</item>
         <item>both_modes</item>
     </string-array>
+
+    <string-array name="reply_entries_typeOfAnswer">
+        <item>Swipe</item>
+        <item>Buttons</item>
+    </string-array>
+    <string-array name="reply_values_typeOfAnswer">
+        <item>swipe</item>
+        <item>buttons</item>
+    </string-array>
 </resources>
