@@ -4,15 +4,22 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import cz.dobris.zkousec.R
 import cz.dobris.zkousec.db.DBHelper
 import cz.dobris.zkousec.domain.TestSession
@@ -25,6 +32,7 @@ import kotlin.concurrent.thread
 class QPSetupActivity : AppCompatActivity() {
     lateinit var fileName: String
     var session: TestSession? = null
+
     override fun onStart() {
         super.onStart()
 
@@ -64,6 +72,29 @@ class QPSetupActivity : AppCompatActivity() {
             chipLearn.id -> StartButton.visibility = View.VISIBLE
             else -> StartButton.visibility = View.INVISIBLE
         }
+
+        editTextNumberStart.setOnEditorActionListener { v, actionId, event ->
+            var handled = false
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                clampEditTextStart()
+                handled = true
+            }
+            handled
+        }
+
+        editTextNumberStart.setOnFocusChangeListener { view: View, b: Boolean -> clampEditTextStart() }
+
+        editTextNumberEnd.setOnEditorActionListener { v, actionId, event ->
+            var handled = false
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                clampEditTextEnd()
+                handled = true
+            }
+            handled
+        }
+
+        editTextNumberEnd.setOnFocusChangeListener { view: View, b: Boolean -> clampEditTextEnd() }
+
         StartButton.setOnClickListener {
             val handler = Handler()
             when (TestingOptions.checkedChipId) {
@@ -74,13 +105,15 @@ class QPSetupActivity : AppCompatActivity() {
 
             thread {
                 if (session == null || session!!.remainingQuestions() == 0) {
+                    clampEditTextStart()
+                    clampEditTextEnd()
                     val qp = Storage.loadQFile(fileName, this)
                     session = DBHelper.createTestSession(
                         this, fileName, TestSession(
                             qp,
                             learnMode = TestingOptions.checkedChipId == chipLearn.id,
-                            initializer = TestSession.AllQuestionsInitializer(), answerHandler =
-                            if (TestingOptions.checkedChipId == chipLearn.id) TestSession.RetryIncorrectAnswerHandler() else TestSession.SimpleAnswerHandler()
+                            initializer = TestSession.RangeQuestionsInitializer (editTextNumberStart.text.toString().toInt(), editTextNumberEnd.text.toString().toInt()),
+                            answerHandler = if (TestingOptions.checkedChipId == chipLearn.id) TestSession.RetryIncorrectAnswerHandler() else TestSession.SimpleAnswerHandler()
                         )
                     )
                     handler.post {
@@ -89,23 +122,6 @@ class QPSetupActivity : AppCompatActivity() {
                 } else {
                     handler.post {
                         startActivity (intent)
-                        /*AlertDialog.Builder(this)
-                            .setTitle("Do you want to continue?")
-                            .setPositiveButton("Continue",
-                                DialogInterface.OnClickListener { dialog, which ->
-                                    startActivity(intent)
-                                })
-                            .setNegativeButton("Reset", DialogInterface.OnClickListener { dialog, which ->
-                                thread {
-                                    DBHelper.deleteTestSession(this, fileName)
-                                    session = null
-                                    val qp = Storage.loadQFile(fileName, this)
-                                    handler.post {
-                                        updateVisuals(session, qp);
-                                    }
-                                }
-                            })
-                            .show()*/
                     }
                 }
             }
@@ -143,6 +159,8 @@ class QPSetupActivity : AppCompatActivity() {
         ToProcessCount.text = "Remaining questions: " + if (session == null) qp.questions.size.toString() else session.remainingQuestions().toString()
         val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd. MM. yyyy HH:mm")
         LastUsed.text = "Last used: " + if (session == null) "Unknown" else formatter.format(session.lastUsed)
+        editTextNumberStart.setText("1")
+        editTextNumberEnd.setText(session?.qp?.questions?.size?.toString() ?: qp.questions.size.toString())
         StartButton.text = if (session == null) "Start" else "Continue"
         resetButton.visibility = if (session == null) View.GONE else View.VISIBLE
 
@@ -156,9 +174,13 @@ class QPSetupActivity : AppCompatActivity() {
             }
             chipLearn.isEnabled = false
             chipTest.isEnabled = false
+            editTextNumberStart.isEnabled = false
+            editTextNumberEnd.isEnabled = false
         } else {
             chipLearn.isEnabled = true
             chipTest.isEnabled = true
+            editTextNumberStart.isEnabled = true
+            editTextNumberEnd.isEnabled = true
         }
     }
 
@@ -202,5 +224,22 @@ class QPSetupActivity : AppCompatActivity() {
         editor.apply() {
             putString("lastQPcardString", fileName)
         }.apply()
+    }
+
+    private fun clampEditTextStart () {
+        val start = editTextNumberStart.text.toString().toInt()
+        val end = editTextNumberEnd.text.toString().toInt()
+        if (start > end)
+            editTextNumberStart.setText(end.toString())
+        if (start < 1)
+            editTextNumberStart.setText("1")
+    }
+
+    private fun clampEditTextEnd () {
+        val start : Int = editTextNumberStart.text.toString().toInt ()
+        val end : Int = editTextNumberEnd.text.toString().toInt()
+        if (end < start)
+            editTextNumberEnd.setText (start.toString())
+        //TODO: Add a top cap for the editTextNumberEnd.text
     }
 }
