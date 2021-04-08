@@ -4,14 +4,18 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import cz.dobris.zkousec.R
@@ -20,6 +24,7 @@ import cz.dobris.zkousec.domain.TestSession
 import cz.dobris.zkousec.fileStorage.Storage
 import kotlinx.android.synthetic.main.activity_question_pack_setup2.*
 import layout.QuestionPack
+import java.lang.Exception
 import java.time.format.DateTimeFormatter
 import kotlin.concurrent.thread
 
@@ -73,31 +78,30 @@ class QPSetupActivity : AppCompatActivity() {
         thread {
             val qp = Storage.loadQFile(fileName, this)
             qpHandler.post {
+                editTextNumberStart.setText("1")
+                editTextNumberEnd.setText(qp.questions.size.toString())
+                editTextNumberStart.addTextChangedListener (object : TextWatcher {
+                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
+                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                        validateRangeInput(qp)
+                    }
+
+                    override fun afterTextChanged(s: Editable?) {}
+
+                })
+                editTextNumberEnd.addTextChangedListener (object : TextWatcher {
+                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                        validateRangeInput(qp)
+                    }
+
+                    override fun afterTextChanged(s: Editable?) {}
+
+                })
             }
         }
-
-        editTextNumberStart.setOnEditorActionListener { v, actionId, event ->
-            var handled = false
-            if (actionId == EditorInfo.IME_ACTION_SEND) {
-                clampEditTextStart()
-                handled = true
-            }
-            handled
-        }
-
-        editTextNumberStart.setOnFocusChangeListener { view: View, b: Boolean -> clampEditTextStart() }
-
-        editTextNumberEnd.setOnEditorActionListener { v, actionId, event ->
-            var handled = false
-            if (actionId == EditorInfo.IME_ACTION_SEND) {
-                clampEditTextEnd()
-                handled = true
-            }
-            handled
-        }
-
-        editTextNumberEnd.setOnFocusChangeListener { view: View, b: Boolean -> clampEditTextEnd() }
 
         StartButton.setOnClickListener {
             val handler = Handler()
@@ -110,8 +114,6 @@ class QPSetupActivity : AppCompatActivity() {
             thread {
                 if (session == null || session!!.remainingQuestions() == 0) {
                     val qp = Storage.loadQFile(fileName, this)
-                    clampEditTextStartAndEnd(qp)
-//                    clampEditTextEnd()
                     session = DBHelper.createTestSession(
                         this, fileName, TestSession(
                             qp,
@@ -230,35 +232,22 @@ class QPSetupActivity : AppCompatActivity() {
         }.apply()
     }
 
-    private fun clampEditTextStartAndEnd(qp: QuestionPack) {
-        val start = editTextNumberStart.text.toString().toInt()
-        val end = editTextNumberEnd.text.toString().toInt()
-        if (start < 1)
-            editTextNumberStart.setText("1")
-        if (end < 1)
-            editTextNumberEnd.setText("1")
-        if (start > qp.questions.size)
-            editTextNumberStart.setText(qp.questions.size.toString())
-        if (end > qp.questions.size)
-            editTextNumberEnd.setText(qp.questions.size.toString())
-        if (start > end)
-            editTextNumberStart.setText(end.toString())
-    }
-
-    private fun clampEditTextStart () {
-        val start = editTextNumberStart.text.toString().toInt()
-        val end = editTextNumberEnd.text.toString().toInt()
-        if (start > end)
-            editTextNumberStart.setText(end.toString())
-        if (start < 1)
-            editTextNumberStart.setText("1")
-    }
-
-    private fun clampEditTextEnd () {
-        val start : Int = editTextNumberStart.text.toString().toInt ()
-        val end : Int = editTextNumberEnd.text.toString().toInt()
-        if (end < start)
-            editTextNumberEnd.setText (start.toString())
-        //TODO: Add a top cap for the editTextNumberEnd.text
+    private fun validateRangeInput (qp: QuestionPack) {
+        val start = try { editTextNumberStart.text.toString().toInt() } catch (e : Exception) { -1 }
+        val end = try { editTextNumberEnd.text.toString().toInt() } catch (e : Exception) { -1 }
+        var valid = true
+        if (start < 1 || start > qp.questions.size || start > end) {
+            editTextNumberStart.setTextColor(Color.RED)
+            valid = false
+        } else {
+            editTextNumberStart.setTextColor(Color.BLACK)
+        }
+        if (end < 1 || end > qp.questions.size || start > end) {
+            editTextNumberEnd.setTextColor(Color.RED)
+            valid = false
+        } else {
+            editTextNumberEnd.setTextColor(Color.BLACK)
+        }
+        StartButton.isEnabled = valid
     }
 }
