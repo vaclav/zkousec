@@ -112,7 +112,7 @@ class QPSetupActivity : AppCompatActivity() {
             intent.putExtra("FILE_NAME", fileName)
 
             thread {
-                if (session == null || session!!.remainingQuestions() == 0) {
+                if (session == null) {
                     val qp = Storage.loadQFile(fileName, this)
                     session = DBHelper.createTestSession(
                         this, fileName, TestSession(
@@ -167,7 +167,7 @@ class QPSetupActivity : AppCompatActivity() {
         LastUsed.text = "Last used: " + if (session == null) "Unknown" else formatter.format(session.lastUsed)
         editTextNumberStart.setText("1")
         editTextNumberEnd.setText(session?.qp?.questions?.size?.toString() ?: qp.questions.size.toString())
-        StartButton.text = if (session == null) "Start" else "Continue"
+        StartButton.text = if (session == null) "Start" else if (session!!.remainingQuestions()==0) "Report" else "Continue"
         resetButton.visibility = if (session == null) View.GONE else View.VISIBLE
 
         if (session != null) {
