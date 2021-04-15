@@ -14,14 +14,16 @@ class TestSession(
     initializer: SessionInitializer = AllQuestionsInitializer(),
     val answerHandler: AnswerHandler = SimpleAnswerHandler(),
     val learnMode: Boolean = true,
+    val firstQuestionIndex: Int = 1,
     private val toProcess: MutableList<QuestionStatus> = initializer.initialize(qp),
     private val answeredCorrectly: MutableList<QuestionStatus> = mutableListOf<QuestionStatus>(),
     private val answeredIncorrectly: MutableList<QuestionStatus> = mutableListOf<QuestionStatus>()
 ) {
     val id = qp.fileName
-    var lastUsed : LocalDateTime = LocalDateTime.now()
+    var lastUsed: LocalDateTime = LocalDateTime.now()
 
-    init { }
+    init {
+    }
 
     //  ----------------- Business methods
 
@@ -65,7 +67,8 @@ class TestSession(
             answeredCorrectlyString,
             answeredIncorrectlyString,
             learnMode,
-            date)
+            date,
+            firstQuestionIndex)
     }
 
     private fun encodeQuestionStatus(it: QuestionStatus) =
@@ -74,14 +77,15 @@ class TestSession(
     companion object {
         fun fromSessionEntity(qp: QuestionPack, entity: SessionEntity): TestSession {
             Log.d("Zkousec", "Is learn mode (read):" + entity.learnMode)
-            val isLearnMode = if (entity.learnMode==null) false else entity.learnMode
+            val isLearnMode = if (entity.learnMode == null) false else entity.learnMode
             val ah =
-                if (entity.answerHandler!=null && entity.answerHandler.contains("SimpleAnswerHandler")) SimpleAnswerHandler()
+                if (entity.answerHandler != null && entity.answerHandler.contains("SimpleAnswerHandler")) SimpleAnswerHandler()
                 else RetryIncorrectAnswerHandler()
+            val firstIndex = if (entity.firstQuestionIndex!=null) entity.firstQuestionIndex else 1
             val toProcess = parseList(qp, entity.toProcess)
             val answeredCorrectly = parseList(qp, entity.answeredCorrectly)
             val answeredIncorrectly = parseList(qp, entity.answeredIncorrectly)
-            val testSession = TestSession(qp, AllQuestionsInitializer(), ah, isLearnMode, toProcess, answeredCorrectly, answeredIncorrectly)
+            val testSession = TestSession(qp, AllQuestionsInitializer(), ah, isLearnMode, firstIndex, toProcess, answeredCorrectly, answeredIncorrectly)
             val lastUsed = entity.lastUsed
             testSession.lastUsed = LocalDateTime.ofInstant(Instant.ofEpochMilli(lastUsed!!), TimeZone.getDefault().toZoneId());
             return testSession
@@ -157,7 +161,7 @@ class TestSession(
 
             val random = Random(System.currentTimeMillis())
             val alreadyIncludedQuestionIndexes = mutableListOf<Int>()
-            for (i in (rangeStart-1)..rangeEnd-1) {
+            for (i in (rangeStart - 1)..rangeEnd - 1) {
                 statuses.add(QuestionStatus(qp.questions[i]))
             }
             return statuses

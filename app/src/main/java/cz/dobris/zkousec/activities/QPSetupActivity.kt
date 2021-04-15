@@ -117,6 +117,7 @@ class QPSetupActivity : AppCompatActivity() {
                     session = DBHelper.createTestSession(
                         this, fileName, TestSession(
                             qp,
+                            firstQuestionIndex = editTextNumberStart.text.toString().toInt(),
                             learnMode = TestingOptions.checkedChipId == chipLearn.id,
                             initializer = TestSession.RangeQuestionsInitializer (editTextNumberStart.text.toString().toInt(), editTextNumberEnd.text.toString().toInt()),
                             answerHandler = if (TestingOptions.checkedChipId == chipLearn.id) TestSession.RetryIncorrectAnswerHandler() else TestSession.SimpleAnswerHandler()
@@ -165,8 +166,14 @@ class QPSetupActivity : AppCompatActivity() {
         ToProcessCount.text = "Remaining questions: " + if (session == null) qp.questions.size.toString() else session.remainingQuestions().toString()
         val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd. MM. yyyy HH:mm")
         LastUsed.text = "Last used: " + if (session == null) "Unknown" else formatter.format(session.lastUsed)
-        editTextNumberStart.setText("1")
-        editTextNumberEnd.setText(session?.qp?.questions?.size?.toString() ?: qp.questions.size.toString())
+        if(session!=null) {
+            editTextNumberStart.setText(session.firstQuestionIndex.toString())
+            editTextNumberEnd.setText((session.firstQuestionIndex + session.totalQuestions() - 1).toString())
+        } else {
+            editTextNumberStart.setText("1")
+            editTextNumberEnd.setText(qp.questions.size.toString())
+        }
+        //TODO validate after trimming the values, use trimmed values (from: and to:)
         StartButton.text = if (session == null) "Start" else if (session!!.remainingQuestions()==0) "Report" else "Continue"
         resetButton.visibility = if (session == null) View.GONE else View.VISIBLE
 
