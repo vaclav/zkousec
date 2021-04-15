@@ -97,7 +97,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="30sp"
         android:background="@drawable/roundstyle"
-        android:backgroundTint="@color/colorPrimary"
         android:padding="10sp"
         android:text="continue"
         android:textColor="@android:color/white"
