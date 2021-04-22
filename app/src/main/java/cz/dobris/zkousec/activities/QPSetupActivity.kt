@@ -135,14 +135,34 @@ class QPSetupActivity : AppCompatActivity() {
         }
         resetButton.setOnClickListener {
             val handler = Handler ()
-            thread {
-                DBHelper.deleteTestSession(this, fileName)
+            val builder = AlertDialog.Builder(this@QPSetupActivity)
+            builder.setTitle("Confirm reset")
+                .setMessage("Are you sure you want to reset?")
+                .setPositiveButton("Yes") { dialog, id ->
+                    thread {
+                        DBHelper.deleteTestSession(this@QPSetupActivity, fileName)
+                        session = null
+                        val qp = Storage.loadQFile(fileName, this@QPSetupActivity)
+                        handler.post {
+                            updateVisuals(session, qp);
+                        }
+                    }
+                    dialog.cancel()
+                }
+                .setNegativeButton("No") { dialog, id ->
+                    dialog.cancel()
+                }
+            // Create the AlertDialog object and return it
+            val alert = builder.create()
+            alert.show()
+            /*thread {
+                DBHelper.deleteTestSession(this@QPSetupActivity, fileName)
                 session = null
-                val qp = Storage.loadQFile(fileName, this)
+                val qp = Storage.loadQFile(fileName, this@QPSetupActivity)
                 handler.post {
                     updateVisuals(session, qp);
                 }
-            }
+            }*/
         }
         setupCorectlyAnsweredCard.setOnClickListener {
             intent = Intent(this, QPResultsActivity::class.java)
