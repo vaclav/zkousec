@@ -78,8 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:background="@drawable/roundstyle"
-            android:backgroundTint="@android:color/holo_red_light"
+            android:background="@drawable/roundstyle_button_red"
             android:padding="10dp"
             android:text="I don't know" />
 
@@ -88,8 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@drawable/roundstyle"
-            android:backgroundTint="@android:color/holo_orange_dark"
+            android:background="@drawable/roundstyle_button_yellow"
             android:padding="10dp"
             android:text="Show answer" />
 
@@ -99,8 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:background="@drawable/roundstyle"
-            android:backgroundTint="@android:color/holo_green_light"
+            android:background="@drawable/roundstyle_button_green"
             android:padding="10dp"
             android:text="I know" />
 
